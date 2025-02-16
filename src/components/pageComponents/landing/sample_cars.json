@@ -2,22 +2,22 @@
       {
          "id": 1,
          "name": "Car 1",
-         "image": "/placeholder.svg?height=200&width=300&text=Car+1",
+         "image": "/samples/car1.png",
          "description": "This is a description of the car",
          "price": 50
       },
     {
       "id": 2,
       "name": "Car 2",
-      "image": "/placeholder.svg?height=200&width=300&text=Car+2",
+      "image": "/samples/car2.png",
       "description": "This is a description of the car",
       "price": 50
     },
     {
       "id": 3,
       "name": "Car 3",
-      "image": "/placeholder.svg?height=200&width=300&text=Car+3",
+      "image": "/samples/car3.png",
       "description": "This is a description of the car",
       "price": 50
     }
-            ]   
+            ]

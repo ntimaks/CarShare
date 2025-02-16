@@ -77,7 +77,7 @@ export default function Home() {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-2xl font-semibold mb-4">Ready to Share Your Car?</h2>
             <p className="text-muted-foreground mb-8">
-              Earn extra income by renting out your car when you're not using it.
+              Earn extra income by renting out your car when you&apos;re not using it.
             </p>
             <Button className="bg-accent hover:bg-accent/90 text-blue-500-foreground">List Your Car</Button>
           </div>
