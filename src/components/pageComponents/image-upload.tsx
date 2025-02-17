@@ -9,8 +9,8 @@ export default function Home() {
 
     const [images, setImages] = useState<UploadedImage[]>([])
 
-    type UploadedFile = { url: string; key: string };
-    const handleUploadComplete = (res: UploadedFile[]) => {
+    type UploadedImage = { url: string; key: string };
+    const handleUploadComplete = (res: UploadedImage[]) => {
         const newImages = res.map((file) => ({ url: file.url, key: file.key }))
         setImages((prev) => [...prev, ...newImages])
     }
