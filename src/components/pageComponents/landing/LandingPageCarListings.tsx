@@ -42,9 +42,11 @@ export default function LandingPageCarListings() {
                 </div>
                 <Pagination>
                     <PaginationContent>
+
                         <PaginationItem>
                             {currentPage !== 1 && <PaginationPrevious onClick={handlePreviousClick} />}
                         </PaginationItem>
+                        {currentPage !== 1 && <PaginationEllipsis />}
                         {currentPage > 1 && (
                             <PaginationItem>
                                 <PaginationLink onClick={() => setCurrentPage(currentPage - 1)} isActive={false}>
@@ -64,9 +66,12 @@ export default function LandingPageCarListings() {
                                 </PaginationLink>
                             </PaginationItem>
                         )}
+
+                        {currentPage !== totalPages && <PaginationEllipsis />}
                         <PaginationItem>
                             {currentPage !== totalPages && <PaginationNext onClick={handleNextClick} />}
                         </PaginationItem>
+
                     </PaginationContent>
                 </Pagination>
             </div>
