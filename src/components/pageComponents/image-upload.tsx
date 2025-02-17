@@ -1,70 +1,60 @@
-"use client"
+"use client";
+import { useState } from "react";
+import { UploadDropzone } from "@/components/uploadthing";
+import Image from "next/image";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 
-import { useState, useCallback } from "react"
-import { useDropzone } from "react-dropzone"
-import { X } from "lucide-react"
-import Image from "next/image"
-interface ImageUploadProps {
-    value: string[]
-    onChange: (value: string[]) => void
-}
+export default function Home() {
 
-export function ImageUpload({ value, onChange }: ImageUploadProps) {
-    const [files, setFiles] = useState<File[]>([])
+    const [images, setImages] = useState<UploadedImage[]>([])
 
-    const onDrop = useCallback(
-        (acceptedFiles: File[]) => {
-            setFiles((prevFiles) => [...prevFiles, ...acceptedFiles])
-            onChange([...value, ...acceptedFiles.map((file) => URL.createObjectURL(file))])
-        },
-        [onChange, value],
-    )
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: {
-            "image/*": [".jpeg", ".jpg", ".png", ".webp"],
-        },
-    })
-
-    const removeFile = (index: number) => {
-        const newFiles = [...files]
-        newFiles.splice(index, 1)
-        setFiles(newFiles)
-
-        const newValue = [...value]
-        newValue.splice(index, 1)
-        onChange(newValue)
+    type UploadedFile = { url: string; key: string };
+    const handleUploadComplete = (res: UploadedFile[]) => {
+        const newImages = res.map((file) => ({ url: file.url, key: file.key }))
+        setImages((prev) => [...prev, ...newImages])
     }
 
+    const handleRemoveImage = (key: string) => {
+        setImages((prev) => prev.filter((image) => image.key !== key))
+    }
     return (
         <div>
-            <div
-                {...getRootProps()}
-                className={`border-2 border-dashed rounded-md p-4 text-center cursor-pointer ${isDragActive ? "border-primary" : "border-border"
-                    }`}
-            >
-                <input {...getInputProps()} />
-                {isDragActive ? <p>JUS ANTNI</p> : <p>KADS KOBALTS KADA AFRIKA</p>}
-            </div>
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                {value.map((url, index) => (
-                    <div key={index} className="relative">
-                        <Image
-                            src={url || "/placeholder.svg"}
-                            alt={`Uploaded ${index + 1}`}
-                            className="w-full h-32 object-cover rounded-md"
-                        />
-                        <button
-                            onClick={() => removeFile(index)}
-                            className="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1"
-                        >
-                            <X size={16} />
-                        </button>
+            <UploadDropzone
+                className=" border-neutral-800  border-2 rounded-lg"
+                endpoint="imageUploader"
+                onClientUploadComplete={handleUploadComplete}
+                onUploadError={(error: Error) => {
+                    // Do something with the error.
+                    alert(`ERROR! ${error.message}`);
+                }}
+            />
+            {images.length > 0 && (
+                <div className="mt-8">
+                    <h2 className="text-xl font-semibold mb-4">Uploaded Images</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {images.map((image) => (
+                            <div key={image.key} className="relative group border border-neutral-500 border-2 rounded-lg">
+                                <Image
+                                    src={image.url || "/placeholder.svg"}
+                                    alt="Uploaded Image"
+                                    width={300}
+                                    height={300}
+                                    className="rounded-lg object-cover w-full h-64"
+                                />
+                                <Button
+                                    variant="destructive"
+                                    size="icon"
+                                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    onClick={() => handleRemoveImage(image.key)}
+                                >
+                                    <X className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </div>
+            )}
         </div>
-    )
+    );
 }
-
