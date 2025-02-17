@@ -12,48 +12,16 @@ import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import ImageUpload from "@/components/pageComponents/image-upload"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
+import { useState } from "react"
+import { onSubmit } from "./SubmitFunction";
+import { formSchema } from "./FormSchema";
 
-const formSchema = z.object({
-    make: z.string().min(1, "Make is required"),
-    model: z.string().min(1, "Model is required"),
-    year: z.string().regex(/^\d{4}$/, "Year must be a 4-digit number"),
-    licensePlate: z.string().min(1, "License plate number is required"),
-    vin: z.string().optional(),
-    transmission: z.enum(["Manual", "Automatic"]),
-    fuelType: z.enum(["Gasoline", "Diesel", "Electric", "Hybrid"]),
-    vehicleType: z.string().min(1, "Vehicle type is required"),
-    seatingCapacity: z.string().regex(/^\d+$/, "Must be a number"),
-    numberOfDoors: z.string().regex(/^\d+$/, "Must be a number"),
-    trunkSpace: z.string(),
-    description: z.string().min(10, "Description must be at least 10 characters long"),
-    features: z.array(z.string()).optional(),
-    safetyFeatures: z.array(z.string()).optional(),
-    photos: z.array(z.string()).min(1, "At least one photo is required"),
-    pricePerDay: z.string().regex(/^\d+(\.\d{1,2})?$/, "Must be a valid price"),
-    weeklyDiscount: z
-        .string()
-        .regex(/^\d+(\.\d{1,2})?$/, "Must be a valid discount")
-        .optional(),
-    monthlyDiscount: z
-        .string()
-        .regex(/^\d+(\.\d{1,2})?$/, "Must be a valid discount")
-        .optional(),
-    mileageLimit: z.string().regex(/^\d+$/, "Must be a number").optional(),
-    extraMileageCharge: z
-        .string()
-        .regex(/^\d+(\.\d{1,2})?$/, "Must be a valid price")
-        .optional(),
-    fuelPolicy: z.enum(["Full-to-full", "Prepaid"]),
-    availability: z.object({
-        from: z.date(),
-        to: z.date(),
-    }),
-    minRentalDuration: z.string().regex(/^\d+$/, "Must be a number"),
-    maxRentalDuration: z.string().regex(/^\d+$/, "Must be a number"),
-})
+
+
+
 
 export default function CarListingForm() {
-    const { toast } = useToast()
+    const [imageUrls, setImageUrls] = useState<string[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -62,12 +30,18 @@ export default function CarListingForm() {
             safetyFeatures: [],
             photos: [],
         },
-    })
+    });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-        // Here you would typically send the form data to your backend
-    }
+    const handleImagesChange = (urls: string[]) => {
+        setImageUrls(urls);
+        form.setValue('photos', urls); // Update form state with image URLs
+    };
+
+    const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+        await onSubmit(values);
+    };
+
+
 
     return (
         <Form {...form}>
@@ -346,7 +320,7 @@ export default function CarListingForm() {
                             <FormItem>
                                 <FormLabel>Photos</FormLabel>
                                 <FormControl>
-                                    <ImageUpload />
+                                    <ImageUpload onImagesChange={handleImagesChange} />
                                 </FormControl>
                                 <FormDescription>
                                     Upload photos of your car (Front, Rear, Side, Interior, Dashboard, Seats, Trunk)
@@ -491,12 +465,7 @@ export default function CarListingForm() {
                     </div>
                 </div>
 
-                <Button type="submit" onClick={() => {
-                    toast({
-                        title: "Listing Submitted",
-                        description: "Your listing has been submitted successfully",
-                    })
-                }}>Submit Listing</Button>
+                <Button type="submit">Submit Listing</Button>
             </form>
         </Form>
     )

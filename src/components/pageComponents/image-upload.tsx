@@ -5,15 +5,16 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
 
-export default function Home() {
+export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls: string[]) => void }) {
 
     const [images, setImages] = useState<UploadedImage[]>([])
 
     type UploadedImage = { url: string; key: string };
     const handleUploadComplete = (res: UploadedImage[]) => {
-        const newImages = res.map((file) => ({ url: file.url, key: file.key }))
-        setImages((prev) => [...prev, ...newImages])
-    }
+        const newImages = res.map((file) => ({ url: file.url, key: file.key }));
+        setImages((prev) => [...prev, ...newImages]);
+        onImagesChange(newImages.map(image => image.url)); // Pass URLs to parent
+    };
 
     const handleRemoveImage = (key: string) => {
         setImages((prev) => prev.filter((image) => image.key !== key))
