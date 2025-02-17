@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import { ImageUpload } from "@/components/pageComponents/image-upload"
+import { Textarea } from "@/components/ui/textarea"
 
 const formSchema = z.object({
     make: z.string().min(1, "Make is required"),
@@ -24,6 +25,7 @@ const formSchema = z.object({
     seatingCapacity: z.string().regex(/^\d+$/, "Must be a number"),
     numberOfDoors: z.string().regex(/^\d+$/, "Must be a number"),
     trunkSpace: z.string(),
+    description: z.string().min(10, "Description must be at least 10 characters long"),
     features: z.array(z.string()).optional(),
     safetyFeatures: z.array(z.string()).optional(),
     photos: z.array(z.string()).min(1, "At least one photo is required"),
@@ -230,6 +232,26 @@ export default function CarListingForm() {
                                     <FormControl>
                                         <Input placeholder="e.g. 15 cubic feet" {...field} />
                                     </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Vehicle Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Provide a detailed description of your vehicle..."
+                                            className="resize-none"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Describe your vehicle&apos;s condition, special features, and any other relevant information.
+                                    </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
