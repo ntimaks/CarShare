@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import DatePickerWithRange from "./Date-Range-Picker";
+import DatePickerWithRange from "../Date-Range-Picker";
 
 export default function LandingPageHeader() {
     return (
