@@ -45,7 +45,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
                     }`}
             >
                 <input {...getInputProps()} />
-                {isDragActive ? <p>Drop the files here ...</p> : <p>Drag &apos;n&apos; drop some files here, or click to select files</p>}
+                {isDragActive ? <p>JUS ANTNI</p> : <p>KADS KOBALTS KADA AFRIKA</p>}
             </div>
             <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                 {value.map((url, index) => (
