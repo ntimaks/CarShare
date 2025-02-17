@@ -45,13 +45,25 @@ export default function LandingPageCarListings() {
                         <PaginationItem>
                             {currentPage !== 1 && <PaginationPrevious onClick={handlePreviousClick} />}
                         </PaginationItem>
-                        {Array.from({ length: totalPages }, (_, i) => (
-                            <PaginationItem key={i}>
-                                <PaginationLink onClick={() => setCurrentPage(i + 1)} isActive={currentPage === i + 1}>
-                                    {i + 1}
+                        {currentPage > 1 && (
+                            <PaginationItem>
+                                <PaginationLink onClick={() => setCurrentPage(currentPage - 1)} isActive={false}>
+                                    {currentPage - 1}
                                 </PaginationLink>
                             </PaginationItem>
-                        ))}
+                        )}
+                        <PaginationItem>
+                            <PaginationLink onClick={() => setCurrentPage(currentPage)} isActive={true}>
+                                {currentPage}
+                            </PaginationLink>
+                        </PaginationItem>
+                        {currentPage < totalPages && (
+                            <PaginationItem>
+                                <PaginationLink onClick={() => setCurrentPage(currentPage + 1)} isActive={false}>
+                                    {currentPage + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        )}
                         <PaginationItem>
                             {currentPage !== totalPages && <PaginationNext onClick={handleNextClick} />}
                         </PaginationItem>
