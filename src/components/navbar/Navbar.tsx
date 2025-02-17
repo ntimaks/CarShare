@@ -16,7 +16,7 @@ export default function Navbar() {
                     <Link href="#" className="hover:text-blue-500 transition-colors">
                         List Your Car
                     </Link>
-                    <Link href="#" className="hover:text-blue-500 transition-colors">
+                    <Link href="/login" className="hover:text-blue-500 transition-colors">
                         Sign In
                     </Link>
                 </nav>

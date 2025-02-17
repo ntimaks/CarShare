@@ -1,11 +1,9 @@
 import DatePickerWithRange from "@/components/pageComponents/landing/Date-Range-Picker";
 import { Card } from "@/components/ui/card";
 import { Search } from "lucide-react"
-import Image from "next/image"
-
 import { Button } from "@/components/ui/button"
 import sampleCars from "@/components/pageComponents/landing/sample_cars.json"
-
+import CarListing from "@/components/pageComponents/CarListing"
 
 export default function Home() {
   return (
@@ -30,23 +28,7 @@ export default function Home() {
             <h2 className="text-2xl font-semibold mb-8 text-center">Featured Cars</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {sampleCars.map((car) => (
-                <Card key={car.id} className="bg-card border-border">
-                  <Image
-                    src={car.image}
-                    alt={`Featured Car ${car.id}`}
-                    width={300}
-                    height={200}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold mb-2">{car.name}</h3>
-                    <p className="text-muted-foreground text-sm mb-4">{car.description}</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-blue-500 font-semibold">${car.price}/day</span>
-                      <Button className="bg-accent hover:bg-accent/90 text-blue-500-foreground">View Details</Button>
-                    </div>
-                  </div>
-                </Card>
+                <CarListing key={String(car.id)} car={{ ...car, id: String(car.id) }} />
               ))}
             </div>
           </div>
