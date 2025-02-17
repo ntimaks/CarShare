@@ -2,14 +2,23 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button"
 import LandingPageHeader from "@/components/pageComponents/landing/LandingPageHeader"
 import LandingPageCarListings from "@/components/pageComponents/landing/LandingPageCarListings"
+import { createClient } from "@/utils/supabase/server";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient()
+  const { data: cars, error } = await supabase.from("cars").select()
+
+  if (error) {
+    console.error("Error fetching cars:", error)
+    return <div>Error loading cars. Please try again later.</div>
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
 
       <main>
         <LandingPageHeader />
-        <LandingPageCarListings />
+        <LandingPageCarListings cars={cars} />
 
         <section className="py-12 bg-secondary">
           <div className="container mx-auto px-4">

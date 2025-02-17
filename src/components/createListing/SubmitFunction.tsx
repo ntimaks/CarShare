@@ -80,6 +80,13 @@ export async function onSubmit(values: z.infer<typeof formSchema>) {
             throw error;
         }
 
+        toast({
+            title: "Success",
+            description: "Your car listing has been submitted successfully.",
+        })
+
+        window.location.href = '/';
+
         // Optional: Reset form
         // form.reset()
     } catch (error) {

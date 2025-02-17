@@ -1,13 +1,18 @@
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { Card } from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import Image from "next/image";
 
 interface Car {
-    id: string;
-    image: string;
-    name: string;
-    description: string;
-    price: number;
+    id: number
+    make: string
+    model: string
+    year: number
+    price_per_day: number
+    photos: string[]
+    vehicle_type: string
+    transmission: string
+    fuel_type: string
 }
 
 interface CarListingProps {
@@ -16,22 +21,31 @@ interface CarListingProps {
 
 export default function CarListing({ car }: CarListingProps) {
     return (
-        <Card key={car.id} className="bg-card border-border">
-            <Image
-                src={car.image}
-                alt={`Featured Car ${car.id}`}
-                width={300}
-                height={200}
-                className="w-full h-48 object-cover rounded-t-lg"
-            />
-            <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{car.name}</h3>
-                <p className="text-muted-foreground text-sm mb-4">{car.description.length > 50 ? `${car.description.substring(0, 47)}...` : car.description}</p>
-                <div className="flex justify-between items-center">
-                    <span className="text-blue-500 font-semibold">${car.price}/day</span>
-                    <Button className="bg-accent hover:bg-accent/90 text-blue-500-foreground">View Details</Button>
+        <Card key={car.id} className="overflow-hidden">
+            <CardHeader className="p-0">
+                <div className="relative h-48 w-full">
+                    <Image
+                        src={car.photos ? car.photos[0] : '/placeholder-car.jpg'} // Use first photo from array with fallback
+                        alt={`${car.make} ${car.model}`}
+                        layout="fill"
+                        objectFit="cover"
+                    />
                 </div>
-            </div>
+            </CardHeader>
+            <CardContent className="p-4">
+                <CardTitle className="text-xl mb-2">
+                    {car.year} {car.make} {car.model}
+                </CardTitle>
+                <div className="flex flex-wrap gap-2 mb-2">
+                    <Badge variant="secondary">{car.vehicle_type}</Badge>
+                    <Badge variant="secondary">{car.transmission}</Badge>
+                    <Badge variant="secondary">{car.fuel_type}</Badge>
+                </div>
+                <p className="text-muted-foreground">${car.price_per_day} per day</p>
+            </CardContent>
+            <CardFooter className="p-4">
+                <Button className="w-full">Book Now</Button>
+            </CardFooter>
         </Card>
     )
 }
