@@ -6,18 +6,186 @@
          "description": "This is a description of the car",
          "price": 50
       },
-    {
-      "id": 2,
-      "name": "Car 2",
-      "image": "/samples/car2.png",
-      "description": "This is a description of the car",
-      "price": 50
-    },
-    {
-      "id": 3,
-      "name": "Car 3",
-      "image": "/samples/car3.png",
-      "description": "This is a description of the car",
-      "price": 50
-    }
-            ]
+      {
+         "id": 2,
+         "name": "Car 2",
+         "image": "/samples/car2.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 3,
+         "name": "Car 3",
+         "image": "/samples/car3.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 4,
+         "name": "Car 4",
+         "image": "/samples/car4.png",
+         "description": "Luxury and comfort with top-notch performance.",
+         "price": 75
+      },
+      {
+         "id": 5,
+         "name": "Car 5",
+         "image": "/samples/car5.png",
+         "description": "Economical city car, perfect for short trips.",
+         "price": 30
+      },
+      {
+         "id": 6,
+         "name": "Car 6",
+         "image": "/samples/car6.png",
+         "description": "A family car with spacious interior and modern features.",
+         "price": 60
+      },
+      {
+         "id": 7,
+         "name": "Car 7",
+         "image": "/samples/car1.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 8,
+         "name": "Car 8",
+         "image": "/samples/car2.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 9,
+         "name": "Car 9",
+         "image": "/samples/car3.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 10,
+         "name": "Car 10",
+         "image": "/samples/car4.png",
+         "description": "Luxury and comfort with top-notch performance.",
+         "price": 75
+      },
+      {
+         "id": 11,
+         "name": "Car 11",
+         "image": "/samples/car5.png",
+         "description": "Economical city car, perfect for short trips.",
+         "price": 30
+      },
+      {
+         "id": 12,
+         "name": "Car 12",
+         "image": "/samples/car6.png",
+         "description": "A family car with spacious interior and modern features.",
+         "price": 60
+      },
+      {
+         "id": 13,
+         "name": "Car 13",
+         "image": "/samples/car1.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 14,
+         "name": "Car 14",
+         "image": "/samples/car2.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 15,
+         "name": "Car 15",
+         "image": "/samples/car3.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 16,
+         "name": "Car 16",
+         "image": "/samples/car4.png",
+         "description": "Luxury and comfort with top-notch performance.",
+         "price": 75
+      },
+      {
+         "id": 17,
+         "name": "Car 17",
+         "image": "/samples/car5.png",
+         "description": "Economical city car, perfect for short trips.",
+         "price": 30
+      },
+      {
+         "id": 18,
+         "name": "Car 18",
+         "image": "/samples/car6.png",
+         "description": "A family car with spacious interior and modern features.",
+         "price": 60
+      },
+      {
+         "id": 19,
+         "name": "Car 19",
+         "image": "/samples/car1.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 20,
+         "name": "Car 20",
+         "image": "/samples/car2.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 21,
+         "name": "Car 21",
+         "image": "/samples/car3.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 22,
+         "name": "Car 22",
+         "image": "/samples/car4.png",
+         "description": "Luxury and comfort with top-notch performance.",
+         "price": 75
+      },
+      {
+         "id": 23,
+         "name": "Car 23",
+         "image": "/samples/car5.png",
+         "description": "Economical city car, perfect for short trips.",
+         "price": 30
+      },
+      {
+         "id": 24,
+         "name": "Car 24",
+         "image": "/samples/car6.png",
+         "description": "A family car with spacious interior and modern features.",
+         "price": 60
+      },
+      {
+         "id": 25,
+         "name": "Car 25",
+         "image": "/samples/car1.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 26,
+         "name": "Car 26",
+         "image": "/samples/car2.png",
+         "description": "This is a description of the car",
+         "price": 50
+      },
+      {
+         "id": 27,
+         "name": "Car 27",
+         "image": "/samples/car3.png",
+         "description": "This is a description of the car",
+         "price": 50
+      }
+   ]
