@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
       {
         hostname: 'utfs.io',
       },
+      {
+        hostname: 'example.com',
+      },
     ],
   },
 };

@@ -11,7 +11,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import ImageUpload from "@/components/pageComponents/image-upload"
 import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
 import { useState } from "react"
 import { onSubmit } from "./SubmitFunction";
 import { formSchema } from "./FormSchema";
@@ -21,7 +20,7 @@ import { formSchema } from "./FormSchema";
 
 
 export default function CarListingForm() {
-    const [imageUrls, setImageUrls] = useState<string[]>([]);
+    const [, setImageUrls] = useState<string[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -37,9 +36,7 @@ export default function CarListingForm() {
         form.setValue('photos', urls); // Update form state with image URLs
     };
 
-    const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-        await onSubmit(values);
-    };
+
 
 
 

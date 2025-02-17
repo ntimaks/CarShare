@@ -10,7 +10,7 @@ interface Car {
     model: string
     year: number
     price_per_day: number
-    image_url: string
+    photos: string[]
     vehicle_type: string
     transmission: string
     fuel_type: string
@@ -34,7 +34,7 @@ export default async function AvailableCars() {
                         <CardHeader className="p-0">
                             <div className="relative h-48 w-full">
                                 <Image
-                                    src={car.image_url || "/placeholder.svg"}
+                                    src={car.photos ? car.photos[0] : '/placeholder-car.jpg'} // Use first photo from array with fallback
                                     alt={`${car.make} ${car.model}`}
                                     layout="fill"
                                     objectFit="cover"

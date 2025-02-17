@@ -43,7 +43,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>) {
         console.log('- Min Rental Duration:', values.minRentalDuration, 'days');
         console.log('- Max Rental Duration:', values.maxRentalDuration, 'days');
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('cars')
             .insert([
                 {
