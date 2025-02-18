@@ -32,7 +32,7 @@ export default async function Home() {
                 <div key={i} className="text-center">
                   <Card className="w-12 h-12 border border-accent rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-lg font-semibold text-blue-500">{i + 1}</span>
-                    z  </Card>
+                  </Card>
                   <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
                   <p className="text-muted-foreground text-sm">{step.description}</p>
                 </div>
