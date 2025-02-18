@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
@@ -44,7 +45,9 @@ export default function CarListing({ car }: CarListingProps) {
                 <p className="text-muted-foreground">${car.price_per_day} per day</p>
             </CardContent>
             <CardFooter className="p-4">
-                <Button className="w-full">Book Now</Button>
+                <Link href={`/cars/${car.id}`} className="w-full">
+                    <Button className="w-full">View Details</Button>
+                </Link>
             </CardFooter>
         </Card>
     )

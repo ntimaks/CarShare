@@ -1,5 +1,5 @@
 import { toast } from "@/hooks/use-toast";
-import { createClient } from '@/app/api/supabase/client'
+import { createClient } from '@/utils/supabase/client'
 import { z } from "zod";
 import { formSchema } from "./FormSchema";
 
