@@ -20,7 +20,7 @@ import { formSchema } from "./FormSchema";
 
 
 export default function CarListingForm() {
-    const [imageUrls, setImageUrls] = useState<string[]>([]);
+    const [, setImageUrls] = useState<string[]>([]);
     const [imageKeys, setImageKeys] = useState<string[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
