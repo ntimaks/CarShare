@@ -2,10 +2,11 @@ import { toast } from "@/hooks/use-toast";
 import { createClient } from '@/utils/supabase/client'
 import { z } from "zod";
 import { formSchema } from "./FormSchema";
+import { deleteUploadedFiles } from "@/app/api/uploadthing/uploadthing-cleanup";
 
 
 
-export async function onSubmit(values: z.infer<typeof formSchema>) {
+export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: string[]) {
     try {
         const supabase = await createClient();
 
@@ -77,6 +78,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>) {
             .select();
 
         if (error) {
+            await deleteUploadedFiles(imageKeys);
             throw error;
         }
 
@@ -90,6 +92,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>) {
         // Optional: Reset form
         // form.reset()
     } catch (error) {
+        await deleteUploadedFiles(imageKeys);
         console.error("Submission error:", error)
         toast({
             title: "Error",

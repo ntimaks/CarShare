@@ -1,53 +1,96 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UploadDropzone } from "@/components/uploadthing";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
-export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls: string[]) => void }) {
-
-    const [images, setImages] = useState<UploadedImage[]>([])
+export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls: string[], keys: string[]) => void }) {
+    const [images, setImages] = useState<UploadedImage[]>([]);
+    const [imageTimeouts, setImageTimeouts] = useState<{ [key: string]: NodeJS.Timeout }>({});
 
     type UploadedImage = { url: string; key: string };
+
+    useEffect(() => {
+        return () => {
+            // Cleanup timeouts when component unmounts
+            Object.values(imageTimeouts).forEach(timeout => clearTimeout(timeout));
+        };
+    }, [imageTimeouts]);
+
     const handleUploadComplete = (res: UploadedImage[]) => {
         const newImages = res.map((file) => ({ url: file.url, key: file.key }));
         setImages((prev) => [...prev, ...newImages]);
-        onImagesChange(newImages.map(image => image.url)); // Pass URLs to parent
+        onImagesChange(
+            newImages.map(image => image.url),
+            newImages.map(image => image.key)
+        );
+
+        // Set timeout for each new image
+        const newTimeouts: { [key: string]: NodeJS.Timeout } = {};
+        newImages.forEach(image => {
+            newTimeouts[image.key] = setTimeout(async () => {
+                await deleteImage(image.key);
+                toast({
+                    title: "Image Removed",
+                    description: "Image was automatically removed due to form inactivity.",
+                    variant: "destructive",
+                });
+            }, 6000000); // 100 minute timeout
+        });
+
+        setImageTimeouts(prev => ({ ...prev, ...newTimeouts }));
+    };
+
+    const deleteImage = async (key: string) => {
+        try {
+            const response = await fetch('/api/uploadthing/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url: `https://utfs.io/f/${key}` }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete image');
+            }
+
+            // Clear the timeout
+            if (imageTimeouts[key]) {
+                clearTimeout(imageTimeouts[key]);
+                const { [key]: _, ...rest } = imageTimeouts;
+                setImageTimeouts(rest);
+            }
+
+            // Update state
+            setImages(prev => prev.filter(image => image.key !== key));
+            onImagesChange(
+                images.filter(image => image.key !== key).map(image => image.url),
+                images.filter(image => image.key !== key).map(image => image.key)
+            );
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            toast({
+                title: "Error",
+                description: "Failed to delete image",
+                variant: "destructive",
+            });
+        }
     };
 
     const handleRemoveImage = async (key: string) => {
-        const imageToRemove = images.find(image => image.key === key);
-        if (imageToRemove) {
-            try {
-                const response = await fetch('/api/uploadthing/delete', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ url: imageToRemove.url }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to delete image');
-                }
-
-                setImages((prev) => prev.filter((image) => image.key !== key));
-                onImagesChange(images.filter(image => image.key !== key).map(image => image.url));
-            } catch (error) {
-                alert(`Failed to delete image: ${error instanceof Error ? error.message : 'Unknown error'}`);
-            }
-        }
-    }
+        await deleteImage(key);
+    };
 
     return (
         <div>
             <UploadDropzone
-                className=" border-neutral-800  border-2 rounded-lg"
+                className="border-neutral-800 border-2 rounded-lg"
                 endpoint="imageUploader"
                 onClientUploadComplete={handleUploadComplete}
                 onUploadError={(error: Error) => {
-                    // Do something with the error.
                     alert(`ERROR! ${error.message}`);
                 }}
             />

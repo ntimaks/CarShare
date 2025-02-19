@@ -20,7 +20,8 @@ import { formSchema } from "./FormSchema";
 
 
 export default function CarListingForm() {
-    const [, setImageUrls] = useState<string[]>([]);
+    const [imageUrls, setImageUrls] = useState<string[]>([]);
+    const [imageKeys, setImageKeys] = useState<string[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -31,8 +32,9 @@ export default function CarListingForm() {
         },
     });
 
-    const handleImagesChange = (urls: string[]) => {
+    const handleImagesChange = (urls: string[], keys: string[]) => {
         setImageUrls(urls);
+        setImageKeys(keys);
         form.setValue('photos', urls);
     };
 
@@ -42,7 +44,7 @@ export default function CarListingForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-4">
+            <form onSubmit={form.handleSubmit((values) => onSubmit(values, imageKeys))} className="space-y-8 p-4">
                 <div className="space-y-4">
                     <h2 className="text-2xl font-semibold">Car Information</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
