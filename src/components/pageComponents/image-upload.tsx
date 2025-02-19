@@ -60,7 +60,7 @@ export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls:
             // Clear the timeout
             if (imageTimeouts[key]) {
                 clearTimeout(imageTimeouts[key]);
-                const { [key]: removedTimeout, ...rest } = imageTimeouts;
+                const { [key]: _, ...rest } = imageTimeouts;
                 setImageTimeouts(rest);
             }
 
