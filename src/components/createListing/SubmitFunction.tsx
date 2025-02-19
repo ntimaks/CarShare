@@ -27,7 +27,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>) {
 
         console.log('\nFeatures:');
         console.log('- Features:', values.features);
-        console.log('- Safety Features:', values.safetyFeatures);
+        console.log('- Safety Features:', values.specialConditions);
         console.log('- Photos:', values.photos);
 
         console.log('\nPricing and Terms:');
@@ -60,7 +60,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>) {
                     trunk_space: values.trunkSpace,
                     description: values.description,
                     features: values.features,
-                    safety_features: values.safetyFeatures,
+                    special_conditions: values.specialConditions,
                     photos: values.photos,
                     price_per_day: parseFloat(values.pricePerDay),
                     weekly_discount: values.weeklyDiscount ? parseFloat(values.weeklyDiscount) : null,

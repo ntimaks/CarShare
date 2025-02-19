@@ -26,7 +26,7 @@ interface Car {
     trunk_space: string
     description: string
     features: string[]
-    safety_features: string[]
+    special_conditions: string[]
     weekly_discount: number | null
     monthly_discount: number | null
     mileage_limit: number | null
@@ -156,11 +156,11 @@ export default function CarDetails() {
                             </Badge>
                         ))}
                     </div>
-                    <h3 className="text-xl font-semibold mt-6 mb-2">Safety Features</h3>
+                    <h3 className="text-xl font-semibold mt-6 mb-2">Special Conditions</h3>
                     <div className="flex flex-wrap gap-2">
-                        {car.safety_features.map((feature, index) => (
+                        {car.special_conditions.map((condition, index) => (
                             <Badge key={index} variant="outline">
-                                {feature}
+                                {condition}
                             </Badge>
                         ))}
                     </div>

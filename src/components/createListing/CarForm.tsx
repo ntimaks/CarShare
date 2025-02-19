@@ -26,7 +26,7 @@ export default function CarListingForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             features: [],
-            safetyFeatures: [],
+            specialConditions: [],
             photos: [],
         },
     });
@@ -161,9 +161,25 @@ export default function CarListingForm() {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Vehicle Type</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="e.g. Sedan, SUV, Truck" {...field} />
-                                    </FormControl>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select vehicle type" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Sedan">Sedan</SelectItem>
+                                            <SelectItem value="SUV">SUV</SelectItem>
+                                            <SelectItem value="Hatchback">Hatchback</SelectItem>
+                                            <SelectItem value="Coupe">Coupe</SelectItem>
+                                            <SelectItem value="Convertible">Convertible</SelectItem>
+                                            <SelectItem value="Wagon">Wagon</SelectItem>
+                                            <SelectItem value="Van">Van</SelectItem>
+                                            <SelectItem value="Pickup">Pickup</SelectItem>
+                                            <SelectItem value="Minivan">Minivan</SelectItem>
+                                            <SelectItem value="Luxury">Luxury</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -234,77 +250,99 @@ export default function CarListingForm() {
                         render={() => (
                             <FormItem>
                                 <div className="mb-4">
-                                    <FormLabel className="text-base">Available Features</FormLabel>
+                                    <FormLabel className="text-base">Features</FormLabel>
                                     <FormDescription>Select all that apply.</FormDescription>
                                 </div>
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                    {["GPS", "Bluetooth", "Air Conditioning", "Heated Seats", "Sunroof", "Backup Camera"].map(
-                                        (feature) => (
-                                            <FormField
-                                                key={feature}
-                                                control={form.control}
-                                                name="features"
-                                                render={({ field }) => {
-                                                    return (
-                                                        <FormItem key={feature} className="flex flex-row items-start space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <Checkbox
-                                                                    checked={field.value?.includes(feature)}
-                                                                    onCheckedChange={(checked) => {
-                                                                        return checked
-                                                                            ? field.onChange([...(field.value || []), feature])
-                                                                            : field.onChange(field.value?.filter((value) => value !== feature) || [])
-                                                                    }}
-                                                                />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">{feature}</FormLabel>
-                                                        </FormItem>
-                                                    )
-                                                }}
-                                            />
-                                        ),
-                                    )}
+                                    {[
+                                        "GPS Navigation",
+                                        "Bluetooth",
+                                        "Air Conditioning",
+                                        "Heated Seats",
+                                        "Sunroof",
+                                        "Backup Camera",
+                                        "Apple CarPlay",
+                                        "Android Auto",
+                                        "Wireless Charging",
+                                        "Premium Sound System",
+                                        "Keyless Entry",
+                                        "Push Start",
+                                        "Cruise Control",
+                                        "Airbags",
+                                        "ABS",
+                                        "Parking Sensors",
+                                        "Lane Departure Warning",
+                                        "Blind Spot Monitor",
+                                        "360° Camera",
+                                        "Leather Seats"
+                                    ].map((feature) => (
+                                        <FormField
+                                            key={feature}
+                                            control={form.control}
+                                            name="features"
+                                            render={({ field }) => {
+                                                return (
+                                                    <FormItem key={feature} className="flex flex-row items-start space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <Checkbox
+                                                                checked={field.value?.includes(feature)}
+                                                                onCheckedChange={(checked) => {
+                                                                    return checked
+                                                                        ? field.onChange([...(field.value || []), feature])
+                                                                        : field.onChange(field.value?.filter((value) => value !== feature) || [])
+                                                                }}
+                                                            />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">{feature}</FormLabel>
+                                                    </FormItem>
+                                                )
+                                            }}
+                                        />
+                                    ))}
                                 </div>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
                     <FormField
                         control={form.control}
-                        name="safetyFeatures"
+                        name="specialConditions"
                         render={() => (
                             <FormItem>
                                 <div className="mb-4">
-                                    <FormLabel className="text-base">Safety Features</FormLabel>
+                                    <FormLabel className="text-base">Special Conditions</FormLabel>
                                     <FormDescription>Select all that apply.</FormDescription>
                                 </div>
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                    {["Airbags", "ABS", "Parking Sensors", "Lane Departure Warning", "Blind Spot Monitor"].map(
-                                        (feature) => (
-                                            <FormField
-                                                key={feature}
-                                                control={form.control}
-                                                name="safetyFeatures"
-                                                render={({ field }) => {
-                                                    return (
-                                                        <FormItem key={feature} className="flex flex-row items-start space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <Checkbox
-                                                                    checked={field.value?.includes(feature)}
-                                                                    onCheckedChange={(checked) => {
-                                                                        return checked
-                                                                            ? field.onChange([...(field.value || []), feature])
-                                                                            : field.onChange(field.value?.filter((value) => value !== feature) || [])
-                                                                    }}
-                                                                />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">{feature}</FormLabel>
-                                                        </FormItem>
-                                                    )
-                                                }}
-                                            />
-                                        ),
-                                    )}
+                                    {[
+                                        "Pets Allowed",
+                                        "Smoking Allowed",
+                                        "Trips Abroad Allowed"
+                                    ].map((condition) => (
+                                        <FormField
+                                            key={condition}
+                                            control={form.control}
+                                            name="specialConditions"
+                                            render={({ field }) => {
+                                                return (
+                                                    <FormItem key={condition} className="flex flex-row items-start space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <Checkbox
+                                                                checked={field.value?.includes(condition)}
+                                                                onCheckedChange={(checked) => {
+                                                                    return checked
+                                                                        ? field.onChange([...(field.value || []), condition])
+                                                                        : field.onChange(field.value?.filter((value) => value !== condition) || [])
+                                                                }}
+                                                            />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">{condition}</FormLabel>
+                                                    </FormItem>
+                                                )
+                                            }}
+                                        />
+                                    ))}
                                 </div>
                                 <FormMessage />
                             </FormItem>
@@ -336,9 +374,12 @@ export default function CarListingForm() {
                             name="pricePerDay"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Price per Day</FormLabel>
+                                    <FormLabel>Price per Day (€)</FormLabel>
                                     <FormControl>
-                                        <Input type="number" step="0.01" {...field} />
+                                        <div className="relative">
+                                            <span className="absolute left-3 top-2">€</span>
+                                            <Input type="number" step="0.01" {...field} className="pl-7" />
+                                        </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
