@@ -6,7 +6,8 @@ import { createClient } from "@/utils/supabase/client"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import { type CarouselApi } from "@/components/ui/carousel"
 
 interface Car {
     id: number
@@ -39,6 +40,14 @@ export default function CarDetails() {
     const params = useParams()
     const id = params.id
     const [car, setCar] = useState<Car | null>(null)
+    const [api, setApi] = useState<CarouselApi>()
+
+    // Function to handle thumbnail click
+    const handleThumbnailClick = (index: number) => {
+        if (api) {
+            api.scrollTo(index)
+        }
+    }
 
     useEffect(() => {
         if (id) {
@@ -61,8 +70,6 @@ export default function CarDetails() {
         return <div>Loading...</div>
     }
 
-
-
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-3xl font-bold mb-6">
@@ -70,16 +77,44 @@ export default function CarDetails() {
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    {car.photos.map((photo, index) => (
-                        <div key={index} className="relative h-64 md:h-96">
-                            <Image
-                                src={photo || "/placeholder.svg"}
-                                alt={`${car.make} ${car.model} - Image ${index + 1}`}
-                                layout="fill"
-                                objectFit="cover"
-                            />
+                    <Carousel className="w-full max-w-xs mx-auto" setApi={setApi}>
+                        <CarouselContent>
+                            {car.photos.map((photo, index) => (
+                                <CarouselItem key={index}>
+                                    <div className="relative h-64 md:h-96">
+                                        <Image
+                                            src={photo || "/placeholder.svg"}
+                                            alt={`${car.make} ${car.model} - Image ${index + 1}`}
+                                            layout="fill"
+                                            objectFit="cover"
+                                            className="rounded-lg"
+                                        />
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
+                    <div className="mt-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                            {car.photos.map((photo, index) => (
+                                <div
+                                    key={index}
+                                    className="relative h-24 w-full cursor-pointer hover:opacity-80 transition-opacity"
+                                    onClick={() => handleThumbnailClick(index)}
+                                >
+                                    <Image
+                                        src={photo || "/placeholder.svg"}
+                                        alt={`${car.make} ${car.model} - Image ${index + 1}`}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        className="rounded-lg"
+                                    />
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </div>
                 <div>
                     <h2 className="text-2xl font-semibold mb-4">Car Details</h2>
@@ -180,3 +215,4 @@ export default function CarDetails() {
         </div>
     )
 }
+

@@ -33,7 +33,7 @@ export default function CarListingForm() {
 
     const handleImagesChange = (urls: string[]) => {
         setImageUrls(urls);
-        form.setValue('photos', urls); // Update form state with image URLs
+        form.setValue('photos', urls);
     };
 
 
