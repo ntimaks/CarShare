@@ -1,11 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
 import { createClient } from "@/utils/supabase/server";
 
 export async function login(formData: FormData) {
+    const cookieStore = cookies();
     const supabase = await createClient();
 
     // type-casting here for convenience
@@ -21,7 +22,17 @@ export async function login(formData: FormData) {
         redirect("/error");
     }
 
+    // Force a revalidation of the cache
     revalidatePath("/", "layout");
+
+    // Set a cookie to indicate fresh login
+    (await
+        // Set a cookie to indicate fresh login
+        cookieStore).set("fresh_login", "true", {
+            maxAge: 5, // Short lived cookie
+            path: "/"
+        });
+
     redirect("/");
 }
 
