@@ -16,9 +16,30 @@ export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls:
         onImagesChange(newImages.map(image => image.url)); // Pass URLs to parent
     };
 
-    const handleRemoveImage = (key: string) => {
-        setImages((prev) => prev.filter((image) => image.key !== key))
+    const handleRemoveImage = async (key: string) => {
+        const imageToRemove = images.find(image => image.key === key);
+        if (imageToRemove) {
+            try {
+                const response = await fetch('/api/uploadthing/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: imageToRemove.url }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to delete image');
+                }
+
+                setImages((prev) => prev.filter((image) => image.key !== key));
+                onImagesChange(images.filter(image => image.key !== key).map(image => image.url));
+            } catch (error) {
+                alert(`Failed to delete image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            }
+        }
     }
+
     return (
         <div>
             <UploadDropzone
