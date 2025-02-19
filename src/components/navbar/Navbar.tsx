@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Frame } from "lucide-react";
+import LoginLogoutButton from "../pageComponents/LoginLogoutButton";
 
 export default function Navbar() {
     return (
@@ -16,9 +17,8 @@ export default function Navbar() {
                     <Link href="/createListing" className="hover:text-blue-500 transition-colors">
                         List Your Car
                     </Link>
-                    <Link href="/login" className="hover:text-blue-500 transition-colors">
-                        Sign In
-                    </Link>
+
+                    <LoginLogoutButton />
                 </nav>
             </div>
         </header>

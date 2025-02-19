@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { login } from "@/lib/auth-actions"
+import GoogleSignIn from "./GoogleSignIn"
 
 export function LoginForm({
   className,
@@ -24,12 +26,13 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action="">
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -45,24 +48,23 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" name="password" type="password" required />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" formAction={login} className="w-full">
                 Login
               </Button>
-              <Button variant="outline" className="w-full">
-                Login with Google
-              </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
+              <GoogleSignIn />
             </div>
           </form>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <a href="/signup" className="underline underline-offset-4">
+              Sign up
+            </a>
+          </div>
+
         </CardContent>
       </Card>
-    </div>
+    </div >
   )
 }

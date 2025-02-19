@@ -1,4 +1,4 @@
-import CarListingForm from "@/components/createListing/CarForm";
+import CarListingForm from "@/components/pageComponents/createListing/CarForm";
 
 export default function CreateListing() {
     return (
