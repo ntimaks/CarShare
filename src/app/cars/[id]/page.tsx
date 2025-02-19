@@ -93,28 +93,30 @@ export default function CarDetails() {
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
+                        {car.photos.length > 1 && <CarouselPrevious />}
+                        {car.photos.length > 1 && <CarouselNext />}
                     </Carousel>
-                    <div className="mt-4">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                            {car.photos.map((photo, index) => (
-                                <div
-                                    key={index}
-                                    className="relative h-24 w-full cursor-pointer hover:opacity-80 transition-opacity"
-                                    onClick={() => handleThumbnailClick(index)}
-                                >
-                                    <Image
-                                        src={photo || "/placeholder.svg"}
-                                        alt={`${car.make} ${car.model} - Image ${index + 1}`}
-                                        layout="fill"
-                                        objectFit="cover"
-                                        className="rounded-lg"
-                                    />
-                                </div>
-                            ))}
+                    {car.photos.length > 1 && (
+                        <div className="mt-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                                {car.photos.map((photo, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative h-24 w-full cursor-pointer hover:opacity-80 transition-opacity"
+                                        onClick={() => handleThumbnailClick(index)}
+                                    >
+                                        <Image
+                                            src={photo || "/placeholder.svg"}
+                                            alt={`${car.make} ${car.model} - Image ${index + 1}`}
+                                            layout="fill"
+                                            objectFit="cover"
+                                            className="rounded-lg"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 <div>
                     <h2 className="text-2xl font-semibold mb-4">Car Details</h2>
