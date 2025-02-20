@@ -2,12 +2,9 @@ import { createClient } from '@/utils/supabase/client'
 import { z } from "zod";
 import { formSchema } from "./FormSchema";
 import { deleteUploadedFiles } from "@/app/api/uploadthing/uploadthing-cleanup";
-
-
-
+import { toast } from "react-hot-toast";
 
 export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: string[]) {
-
     try {
         const supabase = await createClient();
 
@@ -79,16 +76,15 @@ export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: st
             .select();
 
         if (error) {
-            try {
-                await deleteUploadedFiles(imageKeys);
-                throw error;
-            } catch (error) {
-                await deleteUploadedFiles(imageKeys);
-                console.error("Submission error:", error);
-            }
+            await deleteUploadedFiles(imageKeys);
+            console.error("Submission error:", error);
+            toast.error("Failed to submit listing. Please try again.");
+        } else {
+            toast.success("Listing submitted successfully!");
         }
     } catch (error) {
         await deleteUploadedFiles(imageKeys);
         console.error("Submission error:", error);
+        toast.error("An unexpected error occurred. Please try again.");
     }
 }

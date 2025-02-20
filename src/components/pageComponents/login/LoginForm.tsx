@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import { useState } from "react"
-
+import { toast } from "react-hot-toast"
 export function LoginForm({
   className,
   ...props
@@ -34,11 +34,13 @@ export function LoginForm({
     });
 
     if (error) {
+      toast.error("Failed to log in. Please check your credentials.");
       router.push("/error");
       setLoading(false)
       return;
     }
 
+    toast.success("Logged in successfully!");
     router.push("/");
     router.refresh();
   }
