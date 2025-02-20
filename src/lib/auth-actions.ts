@@ -56,7 +56,7 @@ export async function signup(formData: FormData) {
         redirect("/error");
     } else {
         revalidatePath("/", "layout");
-        toast.success("Signup successful!");
+        //toast.success("Signup successful!");
         redirect("/");
     }
 }
