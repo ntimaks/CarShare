@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
+import { toast } from "react-hot-toast";
 
 export async function login(formData: FormData) {
     const cookieStore = await cookies();
@@ -52,7 +53,7 @@ export async function signup(formData: FormData) {
         redirect("/error");
     } else {
         revalidatePath("/", "layout");
-        redirect("/");
+        redirect("/signup/confirmEmail");
     }
 }
 
@@ -63,6 +64,7 @@ export async function signout() {
         console.log(error);
         redirect("/error");
     } else {
+        toast.success("Successfully signed out.");
         redirect("/logout");
     }
 }
