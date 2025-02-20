@@ -75,11 +75,11 @@ const Footer = ({
     ],
 }: FooterProps) => {
     return (
-        <footer className="bg-background border-t">
-            <div className="container py-12 md:py-16">
-                <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
-                    <div className="col-span-2 mb-8 lg:mb-0">
-                        <div className="flex items-center gap-2 lg:justify-start">
+        <footer className="bg-background border-t w-full">
+            <div className="w-full mx-auto px-8 py-12 md:py-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+                    <div className="col-span-1 md:col-span-2 lg:col-span-3 mb-8 lg:mb-0">
+                        <div className="flex items-center gap-2">
                             <Link href={logo.url} className="flex items-center space-x-2">
                                 <Frame className="w-6 h-6 text-accent" />
                                 <span className="text-xl font-semibold">{logo.title}</span>
@@ -87,20 +87,22 @@ const Footer = ({
                         </div>
                         <p className="mt-4 text-muted-foreground">{tagline}</p>
                     </div>
-                    {menuItems.map((section, sectionIdx) => (
-                        <div key={sectionIdx}>
-                            <h3 className="mb-4 font-bold">{section.title}</h3>
-                            <ul className="space-y-4 text-muted-foreground">
-                                {section.links.map((link, linkIdx) => (
-                                    <li key={linkIdx} className="font-medium hover:text-accent transition-colors">
-                                        <Link href={link.url}>{link.text}</Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
+                    <div className="col-span-1 md:col-span-2 lg:col-span-9 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {menuItems.map((section, sectionIdx) => (
+                            <div key={sectionIdx}>
+                                <h3 className="mb-4 font-bold">{section.title}</h3>
+                                <ul className="space-y-4 text-muted-foreground">
+                                    {section.links.map((link, linkIdx) => (
+                                        <li key={linkIdx} className="font-medium hover:text-accent transition-colors">
+                                            <Link href={link.url}>{link.text}</Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="mt-12 flex flex-col justify-between gap-4 border-t pt-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
+                <div className="mt-12 flex flex-col md:flex-row justify-between gap-4 border-t pt-8 text-sm font-medium text-muted-foreground">
                     <p>{copyright}</p>
                     <ul className="flex gap-4">
                         {bottomLinks.map((link, linkIdx) => (
