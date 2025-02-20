@@ -81,7 +81,7 @@ const Footer = ({
                     <div className="col-span-1 md:col-span-2 lg:col-span-3 mb-8 lg:mb-0">
                         <div className="flex items-center gap-2">
                             <Link href={logo.url} className="flex items-center space-x-2">
-                                <Frame className="w-6 h-6 text-accent" />
+                                <Frame className="w-6 h-6 text-blue-500" />
                                 <span className="text-xl font-semibold">{logo.title}</span>
                             </Link>
                         </div>
