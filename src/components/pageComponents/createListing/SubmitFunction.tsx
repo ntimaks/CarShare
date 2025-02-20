@@ -1,12 +1,15 @@
-import { toast } from "@/hooks/use-toast";
 import { createClient } from '@/utils/supabase/client'
 import { z } from "zod";
 import { formSchema } from "./FormSchema";
 import { deleteUploadedFiles } from "@/app/api/uploadthing/uploadthing-cleanup";
+import { useToast } from "@/hooks/use-toast"
+
 
 
 
 export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: string[]) {
+    const { toast } = useToast()
+
     try {
         const supabase = await createClient();
 
@@ -79,6 +82,11 @@ export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: st
 
         if (error) {
             await deleteUploadedFiles(imageKeys);
+            toast({
+                title: "Error",
+                description: "There was a problem submitting your listing. Please try again.",
+                variant: "destructive",
+            })
             throw error;
         }
 
