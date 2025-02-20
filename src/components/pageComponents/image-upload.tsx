@@ -4,7 +4,6 @@ import { UploadDropzone } from "@/components/uploadthing";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 
 export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls: string[], keys: string[]) => void }) {
     const [images, setImages] = useState<UploadedImage[]>([]);
@@ -27,23 +26,14 @@ export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls:
             newImages.map(image => image.key)
         );
 
-        // Toast message for successful upload
-        toast({
-            title: "Success",
-            description: "Image uploaded successfully.",
-            variant: "default",
-        });
+
 
         // Set timeout for each new image
         const newTimeouts: { [key: string]: NodeJS.Timeout } = {};
         newImages.forEach(image => {
             newTimeouts[image.key] = setTimeout(async () => {
                 await deleteImage(image.key);
-                toast({
-                    title: "Image Removed",
-                    description: "Image was automatically removed due to form inactivity.",
-                    variant: "destructive",
-                });
+
             }, 6000000); // 100 minute timeout
         });
 
@@ -79,19 +69,10 @@ export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls:
                 images.filter(image => image.key !== key).map(image => image.key)
             );
 
-            // Toast message for successful deletion
-            toast({
-                title: "Success",
-                description: "Image deleted successfully.",
-                variant: "default",
-            });
+
         } catch (error) {
             console.error('Error deleting image:', error);
-            toast({
-                title: "Error",
-                description: "Failed to delete image",
-                variant: "destructive",
-            });
+
         }
     };
 

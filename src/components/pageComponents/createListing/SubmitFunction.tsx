@@ -2,13 +2,11 @@ import { createClient } from '@/utils/supabase/client'
 import { z } from "zod";
 import { formSchema } from "./FormSchema";
 import { deleteUploadedFiles } from "@/app/api/uploadthing/uploadthing-cleanup";
-import { useToast } from "@/hooks/use-toast"
 
 
 
 
 export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: string[]) {
-    const { toast } = useToast()
 
     try {
         const supabase = await createClient();
@@ -81,31 +79,16 @@ export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: st
             .select();
 
         if (error) {
-            await deleteUploadedFiles(imageKeys);
-            toast({
-                title: "Error",
-                description: "There was a problem submitting your listing. Please try again.",
-                variant: "destructive",
-            })
-            throw error;
+            try {
+                await deleteUploadedFiles(imageKeys);
+                throw error;
+            } catch (error) {
+                await deleteUploadedFiles(imageKeys);
+                console.error("Submission error:", error);
+            }
         }
-
-        toast({
-            title: "Success",
-            description: "Your car listing has been submitted successfully.",
-        })
-
-        window.location.href = '/';
-
-        // Optional: Reset form
-        // form.reset()
     } catch (error) {
         await deleteUploadedFiles(imageKeys);
-        console.error("Submission error:", error)
-        toast({
-            title: "Error",
-            description: "There was a problem submitting your listing. Please try again.",
-            variant: "destructive",
-        })
+        console.error("Submission error:", error);
     }
 }
