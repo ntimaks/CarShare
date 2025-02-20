@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { toast } from "react-hot-toast"
 
 export function Navbar() {
     const [user, setUser] = useState<User | null>(null)
@@ -69,7 +70,9 @@ export function Navbar() {
                 </Link>
                 <div className="flex items-center space-x-4">
                     <nav className="hidden md:flex space-x-4">
-                        <Link href="#" className="text-sm hover:text-primary transition-colors">
+                        <Link href="#" onClick={() => {
+                            toast.error("This page doesn't exist yet.")
+                        }} className="text-sm hover:text-primary transition-colors">
                             How It Works
                         </Link>
                         <Link href="/createListing" className="text-sm hover:text-primary transition-colors">

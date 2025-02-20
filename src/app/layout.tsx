@@ -6,6 +6,7 @@ import Footer from "@/components/footer/Footer";
 import Navbar from "@/components/navbar/Navbar";
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Toaster } from "react-hot-toast";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -41,6 +42,27 @@ export default function RootLayout({
           <SpeedInsights />
           {children}
           <Analytics />
+          <Toaster
+            position="bottom-right"
+            reverseOrder={false}
+            gutter={4}
+            containerClassName=""
+            containerStyle={{}}
+            toastOptions={{
+              // Define default options
+              className: '',
+              duration: 5000,
+              removeDelay: 1000,
+              style: {
+                border: '1px solid #27272a',
+
+                background: '#000000',
+                color: '#fff',
+              },
+
+
+            }}
+          />
           <Footer />
 
         </ThemeProvider>

@@ -4,6 +4,7 @@ import { UploadDropzone } from "@/components/uploadthing";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls: string[], keys: string[]) => void }) {
     const [images, setImages] = useState<UploadedImage[]>([]);
@@ -26,15 +27,14 @@ export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls:
             newImages.map(image => image.key)
         );
 
-
+        toast.success("Images uploaded successfully!");
 
         // Set timeout for each new image
         const newTimeouts: { [key: string]: NodeJS.Timeout } = {};
         newImages.forEach(image => {
             newTimeouts[image.key] = setTimeout(async () => {
                 await deleteImage(image.key);
-
-            }, 6000000); // 100 minute timeout
+            }, 600000); // 10 minute timeout
         });
 
         setImageTimeouts(prev => ({ ...prev, ...newTimeouts }));
@@ -69,10 +69,11 @@ export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls:
                 images.filter(image => image.key !== key).map(image => image.key)
             );
 
+            toast.success("Image deleted successfully!");
 
         } catch (error) {
             console.error('Error deleting image:', error);
-
+            toast.error("Failed to delete image.");
         }
     };
 
@@ -87,7 +88,7 @@ export default function ImageUpload({ onImagesChange }: { onImagesChange: (urls:
                 endpoint="imageUploader"
                 onClientUploadComplete={handleUploadComplete}
                 onUploadError={(error: Error) => {
-                    alert(`ERROR! ${error.message}`);
+                    toast.error(`ERROR! ${error.message}`);
                 }}
             />
             {images.length > 0 && (
