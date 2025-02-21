@@ -7,10 +7,8 @@ import { CarFilters } from "@/components/pageComponents/cars/CarFilters"
 import type { DateRange } from "react-day-picker"
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import { Button } from "@/components/ui/button"
-import { useSearchParams } from "next/navigation"
 
 export default function CarsPage() {
-    const searchParams = useSearchParams()
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
     const [, setCars] = useState<any[]>([])
     const [filteredCars, setFilteredCars] = useState<any[]>([])
@@ -19,18 +17,8 @@ export default function CarsPage() {
     const supabase = createClient()
 
     useEffect(() => {
-        const fromParam = searchParams.get('from')
-        const toParam = searchParams.get('to')
-
-        if (fromParam && toParam) {
-            setDateRange({
-                from: new Date(fromParam),
-                to: new Date(toParam)
-            })
-        }
-
         fetchCars()
-    }, [searchParams])
+    }, [])
 
     const fetchCars = async (filters: any = {}) => {
         setIsLoading(true)
