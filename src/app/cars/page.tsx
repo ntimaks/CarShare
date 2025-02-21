@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 
 export default function CarsPage() {
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
-    const [cars, setCars] = useState<any[]>([])
+    const [, setCars] = useState<any[]>([])
     const [filteredCars, setFilteredCars] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(true)
 

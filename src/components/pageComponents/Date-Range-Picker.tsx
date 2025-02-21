@@ -21,7 +21,7 @@ interface DatePickerProps {
 const DatePickerWithRange: React.FC<DatePickerProps> = ({
     className,
     selected,
-    onSelect,
+
 }) => {
     const [date, setDate] = React.useState<DateRange | undefined>(selected || {
         from: new Date(),
