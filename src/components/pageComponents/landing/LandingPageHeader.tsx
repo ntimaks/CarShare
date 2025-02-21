@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import DatePickerWithRange from "../Date-Range-Picker";
@@ -5,7 +7,6 @@ import { DateRange } from "react-day-picker";
 
 export default function LandingPageHeader() {
     const handleDateSelect = (date: DateRange | undefined) => {
-        // Handle the date selection here
         console.log('Selected date range:', date);
     }
 
