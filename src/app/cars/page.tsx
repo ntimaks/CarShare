@@ -13,6 +13,7 @@ export default function CarsPage() {
     const [, setCars] = useState<any[]>([])
     const [filteredCars, setFilteredCars] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [resetTrigger, setResetTrigger] = useState(false)
 
     const supabase = createClient()
 
@@ -72,7 +73,7 @@ export default function CarsPage() {
             <h1 className="text-3xl font-semibold mb-8 text-center">Available Cars</h1>
             <div className="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <DatePickerWithRange className="w-full max-w-sm" selected={dateRange} onSelect={setDateRange} />
-                <CarFilters onFilterChange={handleFilterChange} />
+                <CarFilters onFilterChange={handleFilterChange} resetTrigger={resetTrigger} />
             </div>
             {isLoading ? (
                 <div className="text-center">Loading cars...</div>
@@ -87,6 +88,7 @@ export default function CarsPage() {
                     <p className="mb-4">No cars found matching your criteria.</p>
                     <Button onClick={() => {
                         setDateRange(undefined)
+                        setResetTrigger(prev => !prev)
                         fetchCars()
                     }}>Reset Filters</Button>
                 </div>

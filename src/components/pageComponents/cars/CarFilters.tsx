@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,6 +21,7 @@ import { Drawer, DrawerTitle, DrawerDescription, DrawerContent, DrawerHeader, Dr
 
 interface CarFiltersProps {
     onFilterChange: (filters: CarFilterValues) => void
+    resetTrigger?: boolean
 }
 
 interface CarFilterValues {
@@ -45,13 +46,20 @@ const defaultValues: CarFilterValues = {
     seatingCapacity: "",
 }
 
-export function CarFilters({ onFilterChange }: CarFiltersProps) {
+export function CarFilters({ onFilterChange, resetTrigger }: CarFiltersProps) {
     const [openAccordionItems, setOpenAccordionItems] = useState<string[]>(["car-details"])
     const [activeFilterCount, setActiveFilterCount] = useState(0)
 
     const form = useForm<CarFilterValues>({
         defaultValues,
     })
+
+    useEffect(() => {
+        if (resetTrigger) {
+            form.reset(defaultValues)
+            setActiveFilterCount(0)
+        }
+    }, [resetTrigger])
 
     const onSubmit = (data: CarFilterValues) => {
         onFilterChange(data)
