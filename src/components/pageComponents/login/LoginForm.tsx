@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
-import GoogleSignIn from "./GoogleSignIn";
 
 export function LoginForm({
   className,
@@ -84,7 +83,6 @@ export function LoginForm({
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Logging in..." : "Login"}
               </Button>
-              <GoogleSignIn />
             </div>
           </form>
           <div className="mt-4 text-center text-sm">
