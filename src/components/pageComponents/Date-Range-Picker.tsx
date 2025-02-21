@@ -21,12 +21,17 @@ interface DatePickerProps {
 const DatePickerWithRange: React.FC<DatePickerProps> = ({
     className,
     selected,
-
+    onSelect,
 }) => {
     const [date, setDate] = React.useState<DateRange | undefined>(selected || {
         from: new Date(),
         to: addDays(new Date(), 7),
     })
+
+    // Add this effect to call onSelect when date changes
+    React.useEffect(() => {
+        onSelect(date)
+    }, [date, onSelect])
 
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
