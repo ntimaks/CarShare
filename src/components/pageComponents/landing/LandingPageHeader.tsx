@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import DatePickerWithRange from "../Date-Range-Picker";
+import { DateRange } from "react-day-picker";
 
 export default function LandingPageHeader() {
     return (
@@ -9,7 +10,9 @@ export default function LandingPageHeader() {
             <p className="text-lg text-muted-foreground mb-8">Discover unique cars from local hosts in Latvia</p>
             <div className="max-w-3xl mx-auto bg-card p-4 rounded-lg flex flex-wrap gap-4 justify-center items-center">
                 <div className="flex-grow">
-                    <DatePickerWithRange className="w-full" />
+                    <DatePickerWithRange className="w-full" onSelect={function (date: DateRange | undefined): void {
+                        throw new Error("Function not implemented.");
+                    }} />
                 </div>
                 <Button className="bg-accent hover:bg-accent/90 text-blue-500-foreground">
                     <Search className="mr-2 h-4 w-4" /> Search
