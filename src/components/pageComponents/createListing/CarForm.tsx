@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import ImageUpload from "@/components/pageComponents/image-upload"
-import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 import { onSubmit } from "./SubmitFunction";
 import { formSchema } from "./FormSchema";
