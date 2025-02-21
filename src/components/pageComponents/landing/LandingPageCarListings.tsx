@@ -45,7 +45,7 @@ export default function PaginatedCarListings({ cars }: PaginatedCarListingsProps
 
     return (
         <div className="container mx-auto px-4 flex flex-col gap-4 mb-12">
-            <h2 className="text-2xl font-semibold mb-8 text-center">Available Cars</h2>
+            <h2 className="text-2xl font-semibold mb-8 text-center">Featured Cars</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {cars && cars.slice(indexOfFirstCar, indexOfLastCar).map((car) => (
                     <CarListing key={car.id} car={car} />
