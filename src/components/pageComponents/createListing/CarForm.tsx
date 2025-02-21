@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 import { onSubmit } from "./SubmitFunction";
 import { formSchema } from "./FormSchema";
+import RichTextEditor from "@/components/RichTextEditor"
 
 
 
@@ -47,20 +48,21 @@ export default function CarListingForm() {
             <form onSubmit={form.handleSubmit((values) => onSubmit(values, imageKeys))} className="space-y-8 p-4">
                 <div className="space-y-4">
                     <h2 className="text-2xl font-semibold">Car Information</h2>
+                    <FormField
+                        control={form.control}
+                        name="make"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Make</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g. Toyota" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                            control={form.control}
-                            name="make"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Make</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="e.g. Toyota" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+
                         <FormField
                             control={form.control}
                             name="model"
@@ -212,6 +214,8 @@ export default function CarListingForm() {
                                 </FormItem>
                             )}
                         />
+
+
                         <FormField
                             control={form.control}
                             name="trunkSpace"
@@ -225,6 +229,9 @@ export default function CarListingForm() {
                                 </FormItem>
                             )}
                         />
+
+                    </div>
+                    <div className="w-full">
                         <FormField
                             control={form.control}
                             name="description"
@@ -232,11 +239,7 @@ export default function CarListingForm() {
                                 <FormItem>
                                     <FormLabel>Vehicle Description</FormLabel>
                                     <FormControl>
-                                        <Textarea
-                                            placeholder="Provide a detailed description of your vehicle..."
-                                            className="resize-none"
-                                            {...field}
-                                        />
+                                        <RichTextEditor content={field.value} onChange={field.onChange} />
                                     </FormControl>
                                     <FormDescription>
                                         Describe your vehicle&apos;s condition, special features, and any other relevant information.

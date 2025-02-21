@@ -147,7 +147,7 @@ export default function CarDetails() {
                         </div>
                     </div>
                     <h3 className="text-xl font-semibold mt-6 mb-2">Description</h3>
-                    <p>{car.description}</p>
+                    <div dangerouslySetInnerHTML={{ __html: car.description }} />
                     <h3 className="text-xl font-semibold mt-6 mb-2">Features</h3>
                     <div className="flex flex-wrap gap-2">
                         {car.features.map((feature, index) => (
