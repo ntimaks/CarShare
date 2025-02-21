@@ -103,7 +103,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                 <AccordionItem value="car-details">
                     <AccordionTrigger>Car Details</AccordionTrigger>
                     <AccordionContent>
-                        <div className="space-y-4">
+                        <div className="space-y-4 px-0.5">
                             <div>
                                 <Label htmlFor="make">Make</Label>
                                 <Input
@@ -146,7 +146,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                 <AccordionItem value="vehicle-specs">
                     <AccordionTrigger>Vehicle Specifications</AccordionTrigger>
                     <AccordionContent>
-                        <div className="space-y-4">
+                        <div className="space-y-4 px-0.5">
                             <div>
                                 <Label htmlFor="transmission">Transmission</Label>
                                 <Select
