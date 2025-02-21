@@ -12,7 +12,7 @@ import { useSearchParams } from "next/navigation"
 export default function CarsPage() {
     const searchParams = useSearchParams()
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
-    const [cars, setCars] = useState<any[]>([])
+    const [, setCars] = useState<any[]>([])
     const [filteredCars, setFilteredCars] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
