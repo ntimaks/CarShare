@@ -68,13 +68,22 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
     }
 
     useEffect(() => {
-        // Refocus the input after state update
-        Object.keys(inputRefs.current).forEach((key) => {
-            if (document.activeElement === inputRefs.current[key]) {
-                inputRefs.current[key]?.focus()
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                Object.keys(inputRefs.current).forEach((key) => {
+                    if (document.activeElement === inputRefs.current[key]) {
+                        inputRefs.current[key]?.focus();
+                    }
+                });
             }
-        })
-    }, [filters])
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     const formatPriceRange = (range: number[]) => {
         return `€${range[0]} - €${range[1]}`
@@ -109,7 +118,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                                 <Input
                                     id="make"
                                     value={filters.make}
-                                    onChange={(e) => handleFilterChange("make", e.target.value)}
+                                    onChange={(e) => handleFilterChange("model", e.target.value)}
                                     placeholder="Enter make"
                                     ref={(el) => {
                                         inputRefs.current["make"] = el
@@ -284,7 +293,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                             <DrawerTitle>Filters</DrawerTitle>
                             <DrawerDescription>Customize your car search with these filters.</DrawerDescription>
                         </DrawerHeader>
-                        <div className="px-4">
+                        <div className="px-4 pb-4">
                             <FilterContent />
                         </div>
                     </DrawerContent>
