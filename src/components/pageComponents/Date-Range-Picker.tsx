@@ -12,8 +12,18 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useMediaQuery } from "@/hooks/UseMediaQuery"
 
-export default function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivElement>) {
-    const [date, setDate] = React.useState<DateRange | undefined>({
+interface DatePickerProps {
+    className?: string;
+    selected?: DateRange;
+    onSelect: (date: DateRange | undefined) => void;
+}
+
+const DatePickerWithRange: React.FC<DatePickerProps> = ({
+    className,
+    selected,
+    onSelect,
+}) => {
+    const [date, setDate] = React.useState<DateRange | undefined>(selected || {
         from: new Date(),
         to: addDays(new Date(), 7),
     })
@@ -90,4 +100,6 @@ export default function DatePickerWithRange({ className }: React.HTMLAttributes<
         </div>
     )
 }
+
+export default DatePickerWithRange
 
