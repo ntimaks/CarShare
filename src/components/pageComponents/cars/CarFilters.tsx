@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,83 +20,64 @@ import { Badge } from "@/components/ui/badge"
 import { Drawer, DrawerTitle, DrawerDescription, DrawerContent, DrawerHeader, DrawerTrigger } from "@/components/ui/drawer"
 
 interface CarFiltersProps {
-    onFilterChange: (filters: any) => void
+    onFilterChange: (filters: CarFilterValues) => void
+}
+
+interface CarFilterValues {
+    make: string
+    model: string
+    year: string
+    transmission: string
+    fuelType: string
+    vehicleType: string
+    priceRange: number[]
+    seatingCapacity: string
+}
+
+const defaultValues: CarFilterValues = {
+    make: "",
+    model: "",
+    year: "",
+    transmission: "",
+    fuelType: "",
+    vehicleType: "",
+    priceRange: [0, 1000],
+    seatingCapacity: "",
 }
 
 export function CarFilters({ onFilterChange }: CarFiltersProps) {
-    const [filters, setFilters] = useState({
-        make: "",
-        model: "",
-        year: "",
-        transmission: "",
-        fuelType: "",
-        vehicleType: "",
-        priceRange: [0, 1000],
-        seatingCapacity: "",
-    })
     const [openAccordionItems, setOpenAccordionItems] = useState<string[]>(["car-details"])
-    const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
     const [activeFilterCount, setActiveFilterCount] = useState(0)
 
-    const handleFilterChange = (key: string, value: any) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            const count = Object.values(newFilters).filter((val) =>
-                Array.isArray(val) ? val.some((v) => v !== 0) : val !== "",
-            ).length
-            setActiveFilterCount(count)
-            return newFilters
-        })
-    }
+    const form = useForm<CarFilterValues>({
+        defaultValues,
+    })
 
-    const applyFilters = () => {
-        onFilterChange(filters)
+    const onSubmit = (data: CarFilterValues) => {
+        onFilterChange(data)
+        const count = Object.values(data).filter((val) =>
+            Array.isArray(val) ? val.some((v) => v !== 0) : val !== ""
+        ).length
+        setActiveFilterCount(count)
     }
 
     const resetFilters = () => {
-        setFilters({
-            make: "",
-            model: "",
-            year: "",
-            transmission: "",
-            fuelType: "",
-            vehicleType: "",
-            priceRange: [0, 1000],
-            seatingCapacity: "",
-        })
+        form.reset(defaultValues)
         setActiveFilterCount(0)
-        onFilterChange({})
+        onFilterChange(defaultValues)
     }
-
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Enter') {
-                Object.keys(inputRefs.current).forEach((key) => {
-                    if (document.activeElement === inputRefs.current[key]) {
-                        inputRefs.current[key]?.focus();
-                    }
-                });
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
 
     const formatPriceRange = (range: number[]) => {
         return `€${range[0]} - €${range[1]}`
     }
 
     const FilterContent = () => (
-        <div className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {activeFilterCount > 0 && (
                 <div className="mb-4">
                     <h3 className="font-semibold mb-2">Active Filters:</h3>
                     <div className="flex flex-wrap gap-2">
-                        {Object.entries(filters).map(([key, value]) => {
+                        {Object.entries(form.getValues()).map(([key, value]) => {
                             if (Array.isArray(value) ? value.some((v) => v !== 0) : value !== "") {
                                 return (
                                     <Badge key={key} variant="secondary" className="px-2 py-1">
@@ -117,36 +99,24 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                                 <Label htmlFor="make">Make</Label>
                                 <Input
                                     id="make"
-                                    value={filters.make}
-                                    onChange={(e) => handleFilterChange("make", e.target.value)}
+                                    {...form.register("make")}
                                     placeholder="Enter make"
-                                    ref={(el) => {
-                                        inputRefs.current["make"] = el
-                                    }}
                                 />
                             </div>
                             <div>
                                 <Label htmlFor="model">Model</Label>
                                 <Input
                                     id="model"
-                                    value={filters.model}
-                                    onChange={(e) => handleFilterChange("model", e.target.value)}
+                                    {...form.register("model")}
                                     placeholder="Enter model"
-                                    ref={(el) => {
-                                        inputRefs.current["model"] = el
-                                    }}
                                 />
                             </div>
                             <div>
                                 <Label htmlFor="year">Year</Label>
                                 <Input
                                     id="year"
-                                    value={filters.year}
-                                    onChange={(e) => handleFilterChange("year", e.target.value)}
+                                    {...form.register("year")}
                                     placeholder="Enter year"
-                                    ref={(el) => {
-                                        inputRefs.current["year"] = el
-                                    }}
                                 />
                             </div>
                         </div>
@@ -159,8 +129,8 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                             <div>
                                 <Label htmlFor="transmission">Transmission</Label>
                                 <Select
-                                    value={filters.transmission}
-                                    onValueChange={(value) => handleFilterChange("transmission", value)}
+                                    value={form.watch("transmission")}
+                                    onValueChange={(value) => form.setValue("transmission", value)}
                                 >
                                     <SelectTrigger id="transmission">
                                         <SelectValue placeholder="Select transmission" />
@@ -173,7 +143,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                             </div>
                             <div>
                                 <Label htmlFor="fuelType">Fuel Type</Label>
-                                <Select value={filters.fuelType} onValueChange={(value) => handleFilterChange("fuelType", value)}>
+                                <Select value={form.watch("fuelType")} onValueChange={(value) => form.setValue("fuelType", value)}>
                                     <SelectTrigger id="fuelType">
                                         <SelectValue placeholder="Select fuel type" />
                                     </SelectTrigger>
@@ -187,7 +157,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                             </div>
                             <div>
                                 <Label htmlFor="vehicleType">Vehicle Type</Label>
-                                <Select value={filters.vehicleType} onValueChange={(value) => handleFilterChange("vehicleType", value)}>
+                                <Select value={form.watch("vehicleType")} onValueChange={(value) => form.setValue("vehicleType", value)}>
                                     <SelectTrigger id="vehicleType">
                                         <SelectValue placeholder="Select vehicle type" />
                                     </SelectTrigger>
@@ -209,13 +179,9 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                                 <Label htmlFor="seatingCapacity">Seating Capacity</Label>
                                 <Input
                                     id="seatingCapacity"
-                                    value={filters.seatingCapacity}
-                                    onChange={(e) => handleFilterChange("seatingCapacity", e.target.value)}
-                                    placeholder="Enter seating capacity"
                                     type="number"
-                                    ref={(el) => {
-                                        inputRefs.current["seatingCapacity"] = el
-                                    }}
+                                    {...form.register("seatingCapacity")}
+                                    placeholder="Enter seating capacity"
                                 />
                             </div>
                         </div>
@@ -230,27 +196,27 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                                 min={0}
                                 max={1000}
                                 step={10}
-                                value={filters.priceRange}
-                                onValueChange={(value) => handleFilterChange("priceRange", value)}
+                                value={form.watch("priceRange")}
+                                onValueChange={(value) => form.setValue("priceRange", value)}
                                 className="mt-2"
                             />
                             <div className="flex justify-between mt-1 text-sm text-muted-foreground">
-                                <span>€{filters.priceRange[0]}</span>
-                                <span>€{filters.priceRange[1]}</span>
+                                <span>€{form.watch("priceRange")[0]}</span>
+                                <span>€{form.watch("priceRange")[1]}</span>
                             </div>
                         </div>
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
             <div className="flex justify-between">
-                <Button variant="outline" onClick={resetFilters}>
+                <Button type="button" variant="outline" onClick={resetFilters}>
                     Reset Filters
                 </Button>
-                <Button onClick={applyFilters} disabled={activeFilterCount === 0}>
+                <Button type="submit">
                     Apply Filters
                 </Button>
             </div>
-        </div>
+        </form>
     )
 
     return (

@@ -4,10 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import DatePickerWithRange from "../Date-Range-Picker";
 import { DateRange } from "react-day-picker";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LandingPageHeader() {
+    const router = useRouter();
+    const [dateRange, setDateRange] = useState<DateRange | undefined>();
+
     const handleDateSelect = (date: DateRange | undefined) => {
-        console.log('Selected date range:', date);
+        setDateRange(date);
+    }
+
+    const handleSearch = () => {
+        if (dateRange?.from && dateRange?.to) {
+            const fromDate = dateRange.from.toISOString().split('T')[0];
+            const toDate = dateRange.to.toISOString().split('T')[0];
+            router.push(`/cars?from=${fromDate}&to=${toDate}`);
+        } else {
+            router.push('/cars');
+        }
     }
 
     return (
@@ -18,7 +33,10 @@ export default function LandingPageHeader() {
                 <div className="flex-grow">
                     <DatePickerWithRange className="w-full" onSelect={handleDateSelect} />
                 </div>
-                <Button className="bg-accent hover:bg-accent/90 text-blue-500-foreground">
+                <Button
+                    className="bg-accent hover:bg-accent/90 text-blue-500-foreground"
+                    onClick={handleSearch}
+                >
                     <Search className="mr-2 h-4 w-4" /> Search
                 </Button>
             </div>

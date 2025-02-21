@@ -34,6 +34,8 @@ interface Car {
     fuel_policy: string
     min_rental_duration: number
     max_rental_duration: number
+    availability_from: string
+    availability_to: string
 }
 
 export default function CarDetails() {
@@ -59,6 +61,8 @@ export default function CarDetails() {
                     console.error("Error fetching car:", error)
                 } else {
                     setCar(data)
+                    console.log('Car data:', data)
+
                 }
             }
 
@@ -209,6 +213,22 @@ export default function CarDetails() {
                         <p className="font-semibold">Maximum Rental Duration:</p>
                         <p>{car.max_rental_duration} days</p>
                     </div>
+                    <div>
+                        <p className="font-semibold">Available From:</p>
+                        <p>{new Date(car.availability_from).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })}</p>
+                    </div>
+                    <div>
+                        <p className="font-semibold">Available Until:</p>
+                        <p>{new Date(car.availability_to).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })}</p>
+                    </div>
                 </div>
             </div>
             <div className="mt-8">
@@ -217,4 +237,3 @@ export default function CarDetails() {
         </div>
     )
 }
-

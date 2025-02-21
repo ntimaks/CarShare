@@ -26,7 +26,7 @@ export default function CarListing({ car }: CarListingProps) {
             <CardHeader className="p-0">
                 <div className="relative h-48 w-full">
                     <Image
-                        src={car.photos ? car.photos[0] : '/placeholder-car.jpg'} // Use first photo from array with fallback
+                        src={car.photos ? car.photos[0] : '/placeholder-car.jpg'}
                         alt={`${car.make} ${car.model}`}
                         layout="fill"
                         objectFit="cover"

@@ -7,18 +7,30 @@ import { CarFilters } from "@/components/pageComponents/cars/CarFilters"
 import type { DateRange } from "react-day-picker"
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import { Button } from "@/components/ui/button"
+import { useSearchParams } from "next/navigation"
 
 export default function CarsPage() {
+    const searchParams = useSearchParams()
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
-    const [, setCars] = useState<any[]>([])
+    const [cars, setCars] = useState<any[]>([])
     const [filteredCars, setFilteredCars] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
     const supabase = createClient()
 
     useEffect(() => {
+        const fromParam = searchParams.get('from')
+        const toParam = searchParams.get('to')
+
+        if (fromParam && toParam) {
+            setDateRange({
+                from: new Date(fromParam),
+                to: new Date(toParam)
+            })
+        }
+
         fetchCars()
-    }, [])
+    }, [searchParams])
 
     const fetchCars = async (filters: any = {}) => {
         setIsLoading(true)
@@ -33,6 +45,14 @@ export default function CarsPage() {
         if (filters.seatingCapacity) query = query.gte("seating_capacity", filters.seatingCapacity)
         if (filters.priceRange) {
             query = query.gte("price_per_day", filters.priceRange[0]).lte("price_per_day", filters.priceRange[1])
+        }
+        if (filters.dateRange?.from && filters.dateRange?.to) {
+            const fromDate = filters.dateRange.from.toISOString().split('T')[0]
+            const toDate = filters.dateRange.to.toISOString().split('T')[0]
+
+            query = query
+                .lte('availability_from', toDate)
+                .gte('availability_to', fromDate)
         }
 
         const { data, error } = await query
@@ -49,8 +69,15 @@ export default function CarsPage() {
     }
 
     const handleFilterChange = (filters: any) => {
-        fetchCars(filters)
+        fetchCars({ ...filters, dateRange })
     }
+
+    useEffect(() => {
+        if (dateRange?.from && dateRange?.to) {
+            console.log("Fetching cars with date range:", dateRange)
+            fetchCars({ dateRange })
+        }
+    }, [dateRange])
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -70,10 +97,12 @@ export default function CarsPage() {
             ) : (
                 <div className="text-center">
                     <p className="mb-4">No cars found matching your criteria.</p>
-                    <Button onClick={() => fetchCars()}>Reset Filters</Button>
+                    <Button onClick={() => {
+                        setDateRange(undefined)
+                        fetchCars()
+                    }}>Reset Filters</Button>
                 </div>
             )}
         </div>
     )
 }
-
