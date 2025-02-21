@@ -118,7 +118,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
                                 <Input
                                     id="make"
                                     value={filters.make}
-                                    onChange={(e) => handleFilterChange("model", e.target.value)}
+                                    onChange={(e) => handleFilterChange("make", e.target.value)}
                                     placeholder="Enter make"
                                     ref={(el) => {
                                         inputRefs.current["make"] = el
