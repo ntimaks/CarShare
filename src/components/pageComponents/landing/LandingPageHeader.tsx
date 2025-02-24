@@ -28,7 +28,7 @@ export default function LandingPageHeader() {
     return (
         <section className="py-20 text-center">
             <h1 className="text-4xl font-bold mb-4">Rent the Perfect Car</h1>
-            <p className="text-lg text-muted-foreground mb-8">Discover unique cars from local hosts in Latvia</p>
+        <p className="text-lg text-muted-foreground mb-8">Discover unique cars from local hosts in Latvia</p>
             <div className="max-w-3xl mx-auto bg-card p-4 rounded-lg flex flex-wrap gap-4 justify-center items-center">
                 <div className="flex-grow">
                     <DatePickerWithRange className="w-full" onSelect={handleDateSelect} />

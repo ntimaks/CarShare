@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { type CarouselApi } from "@/components/ui/carousel"
+import BookingForm from "@/components/pageComponents/carListing/BookingForm"
+import type { DateRange } from "react-day-picker"
 
 interface Car {
     id: number
@@ -43,6 +45,7 @@ export default function CarDetails() {
     const id = params.id
     const [car, setCar] = useState<Car | null>(null)
     const [api, setApi] = useState<CarouselApi>()
+    const [dateRange, setDateRange] = useState<DateRange | undefined>()
 
     // Function to handle thumbnail click
     const handleThumbnailClick = (index: number) => {
@@ -76,97 +79,102 @@ export default function CarDetails() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6">
-                {car.year} {car.make} {car.model}
-            </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <Carousel className="w-full max-w-xs mx-auto" setApi={setApi}>
-                        <CarouselContent>
-                            {car.photos.map((photo, index) => (
-                                <CarouselItem key={index}>
-                                    <div className="relative h-64 md:h-96">
-                                        <Image
-                                            src={photo || "/placeholder.svg"}
-                                            alt={`${car.make} ${car.model} - Image ${index + 1}`}
-                                            layout="fill"
-                                            objectFit="cover"
-                                            className="rounded-lg"
-                                        />
-                                    </div>
-                                </CarouselItem>
-                            ))}
-                        </CarouselContent>
-                        {car.photos.length > 1 && <CarouselPrevious />}
-                        {car.photos.length > 1 && <CarouselNext />}
-                    </Carousel>
-                    {car.photos.length > 1 && (
-                        <div className="mt-4">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main Content - Takes up 2 columns */}
+                <div className="lg:col-span-2 space-y-8">
+                    {/* Car Images Carousel */}
+                    <div className="relative aspect-video rounded-lg overflow-hidden">
+                        <Carousel className="w-full">
+                            <CarouselContent>
                                 {car.photos.map((photo, index) => (
-                                    <div
-                                        key={index}
-                                        className="relative h-24 w-full cursor-pointer hover:opacity-80 transition-opacity"
-                                        onClick={() => handleThumbnailClick(index)}
-                                    >
-                                        <Image
-                                            src={photo || "/placeholder.svg"}
-                                            alt={`${car.make} ${car.model} - Image ${index + 1}`}
-                                            layout="fill"
-                                            objectFit="cover"
-                                            className="rounded-lg"
-                                        />
-                                    </div>
+                                    <CarouselItem key={index}>
+                                        <div className="relative h-64 md:h-96">
+                                            <Image
+                                                src={photo || "/placeholder.svg"}
+                                                alt={`${car.make} ${car.model} - Image ${index + 1}`}
+                                                layout="fill"
+                                                objectFit="cover"
+                                                className="rounded-lg"
+                                            />
+                                        </div>
+                                    </CarouselItem>
                                 ))}
+                            </CarouselContent>
+                            {car.photos.length > 1 && <CarouselPrevious />}
+                            {car.photos.length > 1 && <CarouselNext />}
+                        </Carousel>
+                    </div>
+
+                    {/* Car Details */}
+                    <div className="space-y-6">
+                        <div className="flex justify-between items-start">
+                            <h1 className="text-3xl font-bold">
+                                {car.year} {car.make} {car.model}
+                            </h1>
+                        </div>
+
+                        {/* Features and other details */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <p className="font-semibold">Vehicle Type:</p>
+                                <Badge variant="secondary">{car.vehicle_type}</Badge>
+                            </div>
+                            <div>
+                                <p className="font-semibold">Transmission:</p>
+                                <Badge variant="secondary">{car.transmission}</Badge>
+                            </div>
+                            <div>
+                                <p className="font-semibold">Fuel Type:</p>
+                                <Badge variant="secondary">{car.fuel_type}</Badge>
+                            </div>
+                            <div>
+                                <p className="font-semibold">Seating Capacity:</p>
+                                <p>{car.seating_capacity}</p>
+                            </div>
+                            <div>
+                                <p className="font-semibold">Number of Doors:</p>
+                                <p>{car.number_of_doors}</p>
+                            </div>
+                            <div>
+                                <p className="font-semibold">Trunk Space:</p>
+                                <p>{car.trunk_space}</p>
                             </div>
                         </div>
-                    )}
+                        <h3 className="text-xl font-semibold mt-6 mb-2">Description</h3>
+                        <div dangerouslySetInnerHTML={{ __html: car.description }} />
+                        <h3 className="text-xl font-semibold mt-6 mb-2">Features</h3>
+                        <div className="flex flex-wrap gap-2">
+                            {car.features.map((feature, index) => (
+                                <Badge key={index} variant="outline">
+                                    {feature}
+                                </Badge>
+                            ))}
+                        </div>
+                        <h3 className="text-xl font-semibold mt-6 mb-2">Special Conditions</h3>
+                        <div className="flex flex-wrap gap-2">
+                            {car.special_conditions.map((condition, index) => (
+                                <Badge key={index} variant="outline">
+                                    {condition}
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h2 className="text-2xl font-semibold mb-4">Car Details</h2>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <p className="font-semibold">Vehicle Type:</p>
-                            <Badge variant="secondary">{car.vehicle_type}</Badge>
-                        </div>
-                        <div>
-                            <p className="font-semibold">Transmission:</p>
-                            <Badge variant="secondary">{car.transmission}</Badge>
-                        </div>
-                        <div>
-                            <p className="font-semibold">Fuel Type:</p>
-                            <Badge variant="secondary">{car.fuel_type}</Badge>
-                        </div>
-                        <div>
-                            <p className="font-semibold">Seating Capacity:</p>
-                            <p>{car.seating_capacity}</p>
-                        </div>
-                        <div>
-                            <p className="font-semibold">Number of Doors:</p>
-                            <p>{car.number_of_doors}</p>
-                        </div>
-                        <div>
-                            <p className="font-semibold">Trunk Space:</p>
-                            <p>{car.trunk_space}</p>
-                        </div>
-                    </div>
-                    <h3 className="text-xl font-semibold mt-6 mb-2">Description</h3>
-                    <div dangerouslySetInnerHTML={{ __html: car.description }} />
-                    <h3 className="text-xl font-semibold mt-6 mb-2">Features</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {car.features.map((feature, index) => (
-                            <Badge key={index} variant="outline">
-                                {feature}
-                            </Badge>
-                        ))}
-                    </div>
-                    <h3 className="text-xl font-semibold mt-6 mb-2">Special Conditions</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {car.special_conditions.map((condition, index) => (
-                            <Badge key={index} variant="outline">
-                                {condition}
-                            </Badge>
-                        ))}
+
+                {/* Booking Form - Takes up 1 column */}
+                <div className="lg:col-span-1">
+                    <div className="sticky top-8">
+                        <BookingForm
+                            dateRange={dateRange}
+                            onDateRangeChange={setDateRange}
+                            car={{
+                                price_per_day: car.price_per_day,
+                                weekly_discount: car.weekly_discount,
+                                monthly_discount: car.monthly_discount,
+                                mileage_limit: car.mileage_limit,
+                                extra_mileage_charge: car.extra_mileage_charge
+                            }}
+                        />
                     </div>
                 </div>
             </div>
@@ -230,9 +238,6 @@ export default function CarDetails() {
                         })}</p>
                     </div>
                 </div>
-            </div>
-            <div className="mt-8">
-                <Button className="w-full md:w-auto">Book Now</Button>
             </div>
         </div>
     )
