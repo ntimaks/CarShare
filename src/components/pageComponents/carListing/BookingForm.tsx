@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import { useState, useEffect } from "react"
-import { Card, CardTitle, CardContent, CardHeader, CardFooter, CardDescription } from "@/components/ui/card"
+import { Card, CardTitle, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 
 
 interface BookingFormProps {
