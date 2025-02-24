@@ -466,12 +466,12 @@ export default function CarListingForm() {
                     <FormField
                         control={form.control}
                         name="availability"
-                        render={({ _field }) => (
+                        render={({ field }) => (
                             <FormItem className="flex flex-col">
                                 <FormLabel>Availability</FormLabel>
                                 <DatePickerWithRange
                                     className="w-full"
-                                    onSelect={(range) => setDateRange(range)}
+                                    onSelect={(range) => field.onChange(range)}
                                 />
                                 <FormMessage />
                             </FormItem>

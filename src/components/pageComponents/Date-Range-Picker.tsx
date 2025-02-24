@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { format } from "date-fns"
+import { addDays, format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import type { DateRange } from "react-day-picker"
 
@@ -23,13 +23,19 @@ const DatePickerWithRange: React.FC<DatePickerProps> = ({
     selected,
     onSelect,
 }) => {
-    const isDesktop = useMediaQuery("(min-width: 768px)")
+    const [date, setDate] = React.useState<DateRange | undefined>(selected || {
+        from: new Date(),
+        to: addDays(new Date(), 7),
+    })
 
-    const handleSelect = (newDate: DateRange | undefined) => {
-        if (newDate?.from && newDate?.to) {
-            onSelect(newDate)
+    // Only call onSelect when date changes, but not on initial render
+    React.useEffect(() => {
+        if (date !== selected) {
+            onSelect(date)
         }
-    }
+    }, [date, onSelect, selected])
+
+    const isDesktop = useMediaQuery("(min-width: 768px)")
 
     return (
         <div className={cn("grid gap-2", className)}>
@@ -39,16 +45,16 @@ const DatePickerWithRange: React.FC<DatePickerProps> = ({
                         <Button
                             id="date"
                             variant={"outline"}
-                            className={cn("w-full justify-start text-left font-normal", !selected && "text-muted-foreground")}
+                            className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
                         >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {selected?.from ? (
-                                selected.to ? (
+                            {date?.from ? (
+                                date.to ? (
                                     <>
-                                        {format(selected.from, "LLL dd, y")} - {format(selected.to, "LLL dd, y")}
+                                        {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
                                     </>
                                 ) : (
-                                    format(selected.from, "LLL dd, y")
+                                    format(date.from, "LLL dd, y")
                                 )
                             ) : (
                                 <span>Pick a date</span>
@@ -59,30 +65,29 @@ const DatePickerWithRange: React.FC<DatePickerProps> = ({
                         <Calendar
                             initialFocus
                             mode="range"
-                            defaultMonth={selected?.from}
-                            selected={selected}
-                            onSelect={handleSelect}
+                            defaultMonth={date?.from}
+                            selected={date}
+                            onSelect={setDate}
                             numberOfMonths={2}
                         />
                     </PopoverContent>
                 </Popover>
             ) : (
-                // Mobile drawer implementation remains the same but uses handleSelect
                 <Drawer>
                     <DrawerTrigger asChild>
                         <Button
                             id="date"
                             variant={"outline"}
-                            className={cn("w-full justify-start text-left font-normal", !selected && "text-muted-foreground")}
+                            className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
                         >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {selected?.from ? (
-                                selected.to ? (
+                            {date?.from ? (
+                                date.to ? (
                                     <>
-                                        {format(selected.from, "LLL dd, y")} - {format(selected.to, "LLL dd, y")}
+                                        {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
                                     </>
                                 ) : (
-                                    format(selected.from, "LLL dd, y")
+                                    format(date.from, "LLL dd, y")
                                 )
                             ) : (
                                 <span>Pick a date</span>
@@ -94,13 +99,7 @@ const DatePickerWithRange: React.FC<DatePickerProps> = ({
                             <DrawerTitle>Select Date Range</DrawerTitle>
                         </DrawerHeader>
                         <div className="p-4 flex justify-center">
-                            <Calendar
-                                mode="range"
-                                defaultMonth={selected?.from}
-                                selected={selected}
-                                onSelect={handleSelect}
-                                numberOfMonths={1}
-                            />
+                            <Calendar mode="range" defaultMonth={date?.from} selected={date} onSelect={setDate} numberOfMonths={1} />
                         </div>
                     </DrawerContent>
                 </Drawer>
