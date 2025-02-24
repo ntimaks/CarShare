@@ -471,7 +471,7 @@ export default function CarListingForm() {
                                 <FormLabel>Availability</FormLabel>
                                 <DatePickerWithRange
                                     className="w-full"
-                                    onSelect={(range) => field.onChange(range)}
+                                    onSelect={(range) => setDateRange(range)}
                                 />
                                 <FormMessage />
                             </FormItem>
