@@ -43,7 +43,7 @@ export default function CarDetails() {
     const params = useParams()
     const id = params.id
     const [car, setCar] = useState<Car | null>(null)
-    const [api, _setApi] = useState<CarouselApi>()
+    const [_api, _setApi] = useState<CarouselApi>()
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
 
 
