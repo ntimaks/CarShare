@@ -28,12 +28,18 @@ const DatePickerWithRange: React.FC<DatePickerProps> = ({
         to: addDays(new Date(), 7),
     })
 
-    // Only call onSelect when date changes, but not on initial render
+    // Handle initial selected prop
     React.useEffect(() => {
-        if (date !== selected) {
-            onSelect(date)
+        if (selected && JSON.stringify(selected) !== JSON.stringify(date)) {
+            setDate(selected)
         }
-    }, [date, onSelect, selected])
+    }, [selected])
+
+    // Handle date changes
+    const handleDateChange = (newDate: DateRange | undefined) => {
+        setDate(newDate)
+        onSelect(newDate)
+    }
 
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
@@ -67,7 +73,7 @@ const DatePickerWithRange: React.FC<DatePickerProps> = ({
                             mode="range"
                             defaultMonth={date?.from}
                             selected={date}
-                            onSelect={setDate}
+                            onSelect={handleDateChange}
                             numberOfMonths={2}
                         />
                     </PopoverContent>
@@ -99,7 +105,13 @@ const DatePickerWithRange: React.FC<DatePickerProps> = ({
                             <DrawerTitle>Select Date Range</DrawerTitle>
                         </DrawerHeader>
                         <div className="p-4 flex justify-center">
-                            <Calendar mode="range" defaultMonth={date?.from} selected={date} onSelect={setDate} numberOfMonths={1} />
+                            <Calendar
+                                mode="range"
+                                defaultMonth={date?.from}
+                                selected={date}
+                                onSelect={handleDateChange}
+                                numberOfMonths={1}
+                            />
                         </div>
                     </DrawerContent>
                 </Drawer>
