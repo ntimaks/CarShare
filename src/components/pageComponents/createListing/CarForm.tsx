@@ -466,7 +466,7 @@ export default function CarListingForm() {
                     <FormField
                         control={form.control}
                         name="availability"
-                        render={({ field }) => (
+                        render={({ _field }) => (
                             <FormItem className="flex flex-col">
                                 <FormLabel>Availability</FormLabel>
                                 <DatePickerWithRange
