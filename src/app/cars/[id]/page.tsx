@@ -66,6 +66,11 @@ export default function CarDetails() {
             fetchCar()
         }
     }, [id])
+    const handleThumbnailClick = (index: number) => {
+        if (_api) {
+            _api.scrollTo(index)
+        }
+    }
 
     if (!car) {
         return <div>Loading...</div>
@@ -75,14 +80,14 @@ export default function CarDetails() {
         <div className="container mx-auto px-4 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content - Takes up 2 columns */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="lg:col-span-2 space-y-8 w-full">
                     {/* Car Images Carousel */}
-                    <div className="relative aspect-video rounded-lg overflow-hidden">
-                        <Carousel className="w-full">
+                    <div className="grid grid-cols-1 gap-2">
+                        <Carousel className="w-full " setApi={_setApi}>
                             <CarouselContent>
                                 {car.photos.map((photo, index) => (
                                     <CarouselItem key={index}>
-                                        <div className="relative h-64 md:h-96">
+                                        <div className="relative h-96">
                                             <Image
                                                 src={photo || "/placeholder.svg"}
                                                 alt={`${car.make} ${car.model} - Image ${index + 1}`}
@@ -94,10 +99,34 @@ export default function CarDetails() {
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
-                            {car.photos.length > 1 && <CarouselPrevious />}
-                            {car.photos.length > 1 && <CarouselNext />}
+                            {car.photos.length > 1 && (
+                                <>
+                                    <CarouselPrevious className="absolute left-2 top-1/2 transform -translate-y-1/2" />
+                                    <CarouselNext className="absolute right-2 top-1/2 transform -translate-y-1/2" />
+                                </>
+                            )}
                         </Carousel>
+                        {car.photos.length > 1 && (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                                {car.photos.map((photo, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative h-24 w-full cursor-pointer hover:opacity-80 transition-opacity"
+                                        onClick={() => handleThumbnailClick(index)}
+                                    >
+                                        <Image
+                                            src={photo || "/placeholder.svg"}
+                                            alt={`${car.make} ${car.model} - Image ${index + 1}`}
+                                            layout="fill"
+                                            objectFit="cover"
+                                            className="rounded-lg"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
+
 
                     {/* Car Details */}
                     <div className="space-y-6">
