@@ -4,7 +4,6 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { createClient } from "@/utils/supabase/client"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { type CarouselApi } from "@/components/ui/carousel"
@@ -44,15 +43,10 @@ export default function CarDetails() {
     const params = useParams()
     const id = params.id
     const [car, setCar] = useState<Car | null>(null)
-    const [api, setApi] = useState<CarouselApi>()
+    const [api, _setApi] = useState<CarouselApi>()
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
 
-    // Function to handle thumbnail click
-    const handleThumbnailClick = (index: number) => {
-        if (api) {
-            api.scrollTo(index)
-        }
-    }
+
 
     useEffect(() => {
         if (id) {
