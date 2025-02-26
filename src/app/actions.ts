@@ -40,8 +40,8 @@ export async function BuyProduct(formData: FormData) {
             },
             quantity: 1,
         }],
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/success`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/cancel`,
+        success_url: `https://car-share-lac.vercel.app/payment/success`,
+        cancel_url: `https://car-share-lac.vercel.app/payment/cancel`,
     });
 
     return redirect(session.url as string);
