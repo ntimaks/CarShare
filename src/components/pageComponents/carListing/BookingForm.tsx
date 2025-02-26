@@ -9,7 +9,7 @@ import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import { useState, useEffect } from "react"
 import { Card, CardTitle, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { BuyProduct } from "@/app/actions"
-
+import BookButton from "./BookButton"
 
 interface BookingFormProps {
     dateRange?: DateRange
@@ -136,9 +136,7 @@ export default function BookingForm({ dateRange, onDateRangeChange, car }: Booki
                     <form action={BuyProduct}>
                         <input type="hidden" name="id" value={String(car.id)} />
                         <input type="hidden" name="totalPrice" value={String(totalPrice.toFixed(2))} />
-                        <Button type="submit" className="w-full" size="lg">
-                            Book Now
-                        </Button>
+                        <BookButton />
                     </form>
 
                     {/* Features */}
