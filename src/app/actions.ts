@@ -32,7 +32,7 @@ export async function BuyProduct(formData: FormData) {
         line_items: [{
             price_data: {
                 currency: 'eur',
-                unit_amount: totalPrice * 100,
+                unit_amount: Math.round(totalPrice * 100),
                 product_data: {
                     name: `${data.make} ${data.model}`,
                     images: data.photos ? [data.photos[0]] : [],
