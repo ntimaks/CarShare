@@ -32,8 +32,6 @@ export async function login(formData: FormData) {
     redirect("/");
 }
 
-
-
 export async function signup(formData: FormData) {
     const supabase = await createClient();
 
@@ -41,8 +39,13 @@ export async function signup(formData: FormData) {
         const firstName = formData.get("first-name") as string;
         const lastName = formData.get("last-name") as string;
         const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+
+        console.log('=== Starting Signup Process ===');
+        console.log('Form Data received:', { firstName, lastName, email });
 
         // Create Stripe Connect account first
+        console.log('Creating Stripe Connect account...');
         const account = await stripe.accounts.create({
             type: 'express',
             email: email,
@@ -56,11 +59,13 @@ export async function signup(formData: FormData) {
                 last_name: lastName,
             }
         });
+        console.log('Stripe account created successfully:', account.id);
 
         // If Stripe account created successfully, create Supabase user
-        const { error } = await supabase.auth.signUp({
+        console.log('Creating Supabase user...');
+        const { data, error } = await supabase.auth.signUp({
             email: email,
-            password: formData.get("password") as string,
+            password: password,
             options: {
                 data: {
                     full_name: `${firstName} ${lastName}`,
@@ -71,16 +76,23 @@ export async function signup(formData: FormData) {
         });
 
         if (error) {
+            console.error('Supabase signup error:', error);
             // If Supabase error, clean up the Stripe account
+            console.log('Cleaning up Stripe account due to Supabase error...');
             await stripe.accounts.del(account.id);
-            redirect("/error");
-        } else {
-            revalidatePath("/", "layout");
-            redirect("/signup/confirmEmail");
+            return redirect("/error");
         }
+
+        console.log('Supabase user created successfully:', data);
+        revalidatePath("/", "layout");
+        return redirect("/signup/confirmEmail");
+
     } catch (error) {
-        console.error("Signup error:", error);
-        redirect("/error");
+        if ((error as any)?.digest?.includes('NEXT_REDIRECT')) {
+            throw error; // Let Next.js handle the redirect
+        }
+        console.error("Signup process error:", error);
+        return redirect("/error");
     }
 }
 
