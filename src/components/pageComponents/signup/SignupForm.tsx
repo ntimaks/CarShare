@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signup } from "@/lib/auth-actions";
+import SignUpButton from "./SignUpButton";
 export function SignUpForm() {
     return (
         <Card className="mx-auto max-w-sm">
@@ -63,9 +64,8 @@ export function SignUpForm() {
                                 minLength={6}
                             />
                         </div>
-                        <Button type="submit" className="w-full">
-                            Create an account
-                        </Button>
+
+                        <SignUpButton />
                     </div>
                 </form>
                 <div className="mt-4 text-center text-sm">
