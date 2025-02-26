@@ -191,6 +191,7 @@ export default function CarDetails() {
                             dateRange={dateRange}
                             onDateRangeChange={setDateRange}
                             car={{
+                                id: car.id,
                                 price_per_day: car.price_per_day,
                                 weekly_discount: car.weekly_discount,
                                 monthly_discount: car.monthly_discount,
