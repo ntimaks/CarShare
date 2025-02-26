@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { toast } from "react-hot-toast";
 import { stripe } from "@/lib/stripe";
-
 export async function login(formData: FormData) {
     const cookieStore = await cookies();
     const supabase = await createClient();
@@ -32,6 +31,8 @@ export async function login(formData: FormData) {
     redirect("/");
 }
 
+
+
 export async function signup(formData: FormData) {
     const supabase = await createClient();
 
@@ -41,14 +42,18 @@ export async function signup(formData: FormData) {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        console.log('=== Starting Signup Process ===');
-        console.log('Form Data received:', { firstName, lastName, email });
+        if (!firstName || !lastName || !email || !password) {
+            console.error('Missing required fields:', { firstName, lastName, email, hasPassword: !!password });
+            return redirect("/error");
+        }
 
-        // Create Stripe Connect account first
-        console.log('Creating Stripe Connect account...');
+        console.log('Starting signup process...');
+
+        // Create Stripe Connect account
+        console.log('Creating Stripe account...');
         const account = await stripe.accounts.create({
             type: 'express',
-            email: email,
+            email,
             capabilities: {
                 card_payments: { requested: true },
                 transfers: { requested: true }
@@ -59,40 +64,40 @@ export async function signup(formData: FormData) {
                 last_name: lastName,
             }
         });
-        console.log('Stripe account created successfully:', account.id);
+        console.log('Stripe account created:', account.id);
 
-        // If Stripe account created successfully, create Supabase user
+        // Create Supabase user
         console.log('Creating Supabase user...');
-        const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
+        const { data, error: supabaseError } = await supabase.auth.signUp({
+            email,
+            password,
             options: {
+                emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
                 data: {
                     full_name: `${firstName} ${lastName}`,
-                    email: email,
-                    connected_account_id: account.id,
+                    email,
+                    connected_account_id: account.id
                 }
             }
         });
 
-        if (error) {
-            console.error('Supabase signup error:', error);
-            // If Supabase error, clean up the Stripe account
-            console.log('Cleaning up Stripe account due to Supabase error...');
+        if (supabaseError) {
+            console.error('Supabase signup error:', supabaseError);
+            console.log('Cleaning up Stripe account...');
             await stripe.accounts.del(account.id);
             return redirect("/error");
         }
 
-        console.log('Supabase user created successfully:', data);
+        console.log('Supabase signup successful:', data);
         revalidatePath("/", "layout");
         return redirect("/signup/confirmEmail");
 
-    } catch (error) {
-        if ((error as any)?.digest?.includes('NEXT_REDIRECT')) {
-            throw error; // Let Next.js handle the redirect
+    } catch (error: any) {
+        if (!error.digest?.includes('NEXT_REDIRECT')) {
+            console.error("Signup process error:", error);
+            return redirect("/error");
         }
-        console.error("Signup process error:", error);
-        return redirect("/error");
+        throw error;
     }
 }
 
