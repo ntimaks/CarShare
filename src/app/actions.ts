@@ -40,8 +40,8 @@ export async function BuyProduct(formData: FormData) {
             },
             quantity: 1,
         }],
-        success_url: `http://localhost:3000/payment/success`,
-        cancel_url: `http://localhost:3000/payment/cancel`,
+        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/cancel`,
     });
 
     return redirect(session.url as string);
