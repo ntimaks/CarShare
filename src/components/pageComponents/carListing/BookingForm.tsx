@@ -8,12 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import { useState, useEffect } from "react"
 import { Card, CardTitle, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
+import { BuyProduct } from "@/app/actions"
 
 
 interface BookingFormProps {
     dateRange?: DateRange
     onDateRangeChange: (range: DateRange | undefined) => void
     car: {
+        id: number
         price_per_day: number
         weekly_discount: number | null
         monthly_discount: number | null
@@ -26,6 +28,7 @@ export default function BookingForm({ dateRange, onDateRangeChange, car }: Booki
     const [totalPrice, setTotalPrice] = useState(0)
     const [discountAmount, setDiscountAmount] = useState(0)
     const [numberOfDays, setNumberOfDays] = useState(0)
+
 
     useEffect(() => {
         if (dateRange?.from && dateRange?.to) {
@@ -46,8 +49,8 @@ export default function BookingForm({ dateRange, onDateRangeChange, car }: Booki
                 discount = (baseTotal * car.monthly_discount) / 100
             }
 
-            setDiscountAmount(discount)
-            setTotalPrice(baseTotal - discount)
+            setDiscountAmount(Number(discount.toFixed(2)))
+            setTotalPrice(Number((baseTotal - discount).toFixed(2)))
         } else {
             setTotalPrice(0)
             setDiscountAmount(0)
@@ -113,7 +116,7 @@ export default function BookingForm({ dateRange, onDateRangeChange, car }: Booki
                         <div className="space-y-3">
                             <div className="flex justify-between items-center">
                                 <span className="text-sm">Base price ({numberOfDays} days)</span>
-                                <span className="text-sm">€{car.price_per_day * numberOfDays}</span>
+                                <span className="text-sm">€{(car.price_per_day * numberOfDays).toFixed(2)}</span>
                             </div>
                             {discountAmount > 0 && (
                                 <div className="flex justify-between items-center p-3 bg-primary/5 rounded-lg">
@@ -130,9 +133,13 @@ export default function BookingForm({ dateRange, onDateRangeChange, car }: Booki
                     )}
 
                     {/* Continue Button */}
-                    <Button className="w-full" size="lg">
-                        Continue
-                    </Button>
+                    <form action={BuyProduct}>
+                        <input type="hidden" name="id" value={String(car.id)} />
+                        <input type="hidden" name="totalPrice" value={String(totalPrice.toFixed(2))} />
+                        <Button type="submit" className="w-full" size="lg">
+                            Book Now
+                        </Button>
+                    </form>
 
                     {/* Features */}
                     <div className="space-y-4">
