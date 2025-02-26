@@ -75,17 +75,28 @@ export async function signup(formData: FormData) {
                 emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
                 data: {
                     full_name: `${firstName} ${lastName}`,
-                    email,
-                    connected_account_id: account.id
+                    email
                 }
             }
         });
 
-        if (supabaseError) {
-            console.error('Supabase signup error:', supabaseError);
-            console.log('Cleaning up Stripe account...');
-            await stripe.accounts.del(account.id);
-            return redirect("/error");
+        if (!supabaseError && data.user) {
+            // Insert the profile with connected_account_id
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .insert({
+                    id: data.user.id,
+                    full_name: `${firstName} ${lastName}`,
+                    email: email,
+                    connected_account_id: account.id
+                });
+
+            if (profileError) {
+                console.error('Error creating profile:', profileError);
+                console.log('Cleaning up Stripe account...');
+                await stripe.accounts.del(account.id);
+                return redirect("/error");
+            }
         }
 
         console.log('Supabase signup successful:', data);
