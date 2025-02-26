@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { toast } from "react-hot-toast";
+import { stripe } from "@/lib/stripe";
 
 export async function login(formData: FormData) {
     const cookieStore = await cookies();
@@ -31,29 +32,55 @@ export async function login(formData: FormData) {
     redirect("/");
 }
 
+
+
 export async function signup(formData: FormData) {
     const supabase = await createClient();
 
-    const firstName = formData.get("first-name") as string;
-    const lastName = formData.get("last-name") as string;
-    const data = {
-        email: formData.get("email") as string,
-        password: formData.get("password") as string,
-        options: {
-            data: {
-                full_name: `${firstName + " " + lastName}`,
-                email: formData.get("email") as string,
+    try {
+        const firstName = formData.get("first-name") as string;
+        const lastName = formData.get("last-name") as string;
+        const email = formData.get("email") as string;
+
+        // Create Stripe Connect account first
+        const account = await stripe.accounts.create({
+            type: 'express',
+            email: email,
+            capabilities: {
+                card_payments: { requested: true },
+                transfers: { requested: true }
             },
-        },
-    };
+            business_type: 'individual',
+            individual: {
+                first_name: firstName,
+                last_name: lastName,
+            }
+        });
 
-    const { error } = await supabase.auth.signUp(data);
+        // If Stripe account created successfully, create Supabase user
+        const { error } = await supabase.auth.signUp({
+            email: email,
+            password: formData.get("password") as string,
+            options: {
+                data: {
+                    full_name: `${firstName} ${lastName}`,
+                    email: email,
+                    connected_account_id: account.id,
+                }
+            }
+        });
 
-    if (error) {
+        if (error) {
+            // If Supabase error, clean up the Stripe account
+            await stripe.accounts.del(account.id);
+            redirect("/error");
+        } else {
+            revalidatePath("/", "layout");
+            redirect("/signup/confirmEmail");
+        }
+    } catch (error) {
+        console.error("Signup error:", error);
         redirect("/error");
-    } else {
-        revalidatePath("/", "layout");
-        redirect("/signup/confirmEmail");
     }
 }
 
