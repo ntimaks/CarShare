@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { CreditCard, Frame, LogIn, LogOut, Menu, UserCircle } from "lucide-react"
+import { CreditCard, Frame, LogIn, LogOut, Menu, Plus, UserCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { createClient } from "@/utils/supabase/client"
@@ -75,9 +75,7 @@ export function Navbar() {
                         }} className="text-sm hover:text-primary transition-colors">
                             How It Works
                         </Link>
-                        <Link href="/createListing" className="text-sm hover:text-primary transition-colors">
-                            List Your Car
-                        </Link>
+
                     </nav>
                     <div className="flex items-center space-x-4">
                         {user ? (
@@ -124,10 +122,18 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
                         <span>Billing</span>
                     </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/createListing">
+                        <Plus className="mr-2 h-4 w-4" />
+                        <span>List Your Car</span>
+                    </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={onSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                 </DropdownMenuItem>
+
+
             </DropdownMenuContent>
         </DropdownMenu>
     )
