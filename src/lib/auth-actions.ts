@@ -65,6 +65,7 @@ export async function signup(formData: FormData) {
                     first_name: firstName,
                     last_name: lastName,
                 }
+
             });
             console.log('Stripe account created:', account.id);
         } catch (stripeError) {
@@ -87,7 +88,7 @@ export async function signup(formData: FormData) {
         });
 
         if (!supabaseError && data.user) {
-            // First check if profile exists
+            // check if profile exists
             const { data: existingProfile } = await supabase
                 .from('profiles')
                 .select()
@@ -131,6 +132,8 @@ export async function signup(formData: FormData) {
         throw error;
     }
 }
+
+
 
 export async function signout() {
     const supabase = await createClient();
