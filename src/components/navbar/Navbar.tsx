@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Frame, LogIn, LogOut, Menu, UserCircle } from "lucide-react"
+import { CreditCard, Frame, LogIn, LogOut, Menu, UserCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { createClient } from "@/utils/supabase/client"
@@ -117,6 +117,12 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
                 <DropdownMenuItem>
                     <UserCircle className="mr-2 h-4 w-4" />
                     <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/billing">
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        <span>Billing</span>
+                    </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={onSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
