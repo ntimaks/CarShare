@@ -3,10 +3,18 @@ import { z } from "zod";
 import { formSchema } from "./FormSchema";
 import { deleteUploadedFiles } from "@/app/api/uploadthing/uploadthing-cleanup";
 import { toast } from "react-hot-toast";
-
+import { redirect } from "next/navigation";
 export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: string[]) {
     try {
         const supabase = await createClient();
+
+        // Get the current user's ID
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            toast.error("You must be logged in to create a listing");
+            return;
+        }
 
         console.log('=== Form Submission Values ===');
         console.log('Basic Information:');
@@ -46,6 +54,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: st
             .from('cars')
             .insert([
                 {
+                    profile: user.id,
                     make: values.make,
                     model: values.model,
                     year: values.year,
@@ -81,6 +90,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: st
             toast.error("Failed to submit listing. Please try again.");
         } else {
             toast.success("Listing submitted successfully!");
+            redirect("/");
         }
     } catch (error) {
         await deleteUploadedFiles(imageKeys);
