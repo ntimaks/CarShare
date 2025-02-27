@@ -1,16 +1,35 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { CreateStripeAccountLink } from "../actions";
+
+
+async function getData(userId: string) {
+    const supabase = createClient()
+    const { data: profile } = await (await supabase)
+        .from('profiles')
+        .select('connected_account_id, stripe_connected_linked')
+        .eq('id', userId)
+        .eq('stripe_connected_linked', true)
+        .single()
+
+    return profile
+}
 
 export default async function Billing() {
     const supabase = createClient()
     const { data: { user } } = await (await supabase).auth.getUser()
 
+
+    //Ja tu neesi user tad piss ara
     if (!user) {
         toast.error("Please log in to access billing.")
         redirect("/login")
     }
+
+    const profile = await getData(user.id)
 
     return (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -19,6 +38,15 @@ export default async function Billing() {
                     <CardTitle>Billing</CardTitle>
                     <CardDescription>Manage your billing information</CardDescription>
                 </CardHeader>
+                <CardContent>
+                    {profile?.stripe_connected_linked ? (
+                        <p>Connected to Stripe</p>
+                    ) : (
+                        <form action={CreateStripeAccountLink}>
+                            <Button type="submit">Connect to Stripe</Button>
+                        </form>
+                    )}
+                </CardContent>
             </Card>
         </section>
     )

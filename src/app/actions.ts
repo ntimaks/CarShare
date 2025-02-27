@@ -46,3 +46,22 @@ export async function BuyProduct(formData: FormData) {
 
     return redirect(session.url as string);
 }
+
+export async function CreateStripeAccountLink() {
+    const supabase = createClient()
+    const { data: profile } = await (await supabase)
+        .from('profiles')
+        .select('connected_account_id')
+        .eq('id', (await (await supabase).auth.getUser()).data.user?.id)
+        .single()
+
+    const accountLink = await stripe.accountLinks.create({
+        account: profile?.connected_account_id as string,
+        refresh_url: `https://car-share-lac.vercel.app/billing`,
+        return_url: `https://car-share-lac.vercel.app/billing`,
+        type: 'account_onboarding',
+    })
+
+    return redirect(accountLink.url)
+}
+
