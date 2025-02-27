@@ -1,12 +1,14 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export default async function Billing() {
     const supabase = createClient()
     const { data: { user } } = await (await supabase).auth.getUser()
 
     if (!user) {
+        toast.error("Please log in to access billing.")
         redirect("/login")
     }
 
