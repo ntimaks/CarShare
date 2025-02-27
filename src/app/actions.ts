@@ -16,11 +16,20 @@ export async function BuyProduct(formData: FormData) {
 
     const totalPrice = Number(formData.get('totalPrice'));
     const supabase = await createClient();
-    const { data, error } = await supabase
+    const { data: carData, error: carError } = await supabase
         .from('cars')
-        .select('*')
+        .select('*, profiles(connected_account_id)')
         .eq('id', id)
         .single();
+
+    const { data, error } = carData ? {
+        data: {
+            ...carData,
+            connected_account_id: carData.profiles?.connected_account_id
+        },
+        error: null
+    } : { data: null, error: carError };
+
 
     if (error) {
         console.error('Error fetching product:', error);
@@ -40,6 +49,12 @@ export async function BuyProduct(formData: FormData) {
             },
             quantity: 1,
         }],
+        payment_intent_data: {
+            application_fee_amount: Math.round(totalPrice * 100) * 0.1,
+            transfer_data: {
+                destination: data.profiles?.connected_account_id,
+            },
+        },
         success_url: `https://car-share-lac.vercel.app/payment/success`,
         cancel_url: `https://car-share-lac.vercel.app/payment/cancel`,
     });
