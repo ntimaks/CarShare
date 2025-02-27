@@ -2,8 +2,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { CreateStripeAccountLink } from "../actions";
+import { CreateStripeAccountLink, GetStripeDashboard } from "../actions";
 import ConnectStripe from "@/components/pageComponents/billing/ConnectStripe";
+import { Button } from "@/components/ui/button";
 async function getData(userId: string) {
     const supabase = createClient()
     const { data: profile } = await (await supabase)
@@ -37,7 +38,9 @@ export default async function Billing() {
                 </CardHeader>
                 <CardContent>
                     {profile?.stripe_connected_linked ? (
-                        <p>Connected to Stripe</p>
+                        <form action={GetStripeDashboard}>
+                            <Button>Go to Stripe Dashboard</Button>
+                        </form>
                     ) : (
                         <form action={CreateStripeAccountLink}>
                             <ConnectStripe />

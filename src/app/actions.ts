@@ -65,3 +65,16 @@ export async function CreateStripeAccountLink() {
     return redirect(accountLink.url)
 }
 
+export async function GetStripeDashboard() {
+    const supabase = createClient()
+    const { data: profile } = await (await supabase)
+        .from('profiles')
+        .select('connected_account_id')
+        .eq('id', (await (await supabase).auth.getUser()).data.user?.id)
+        .single()
+
+    const loginLink = await stripe.accounts.createLoginLink(profile?.connected_account_id as string)
+
+    return redirect(loginLink.url)
+}
+
