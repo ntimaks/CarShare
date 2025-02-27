@@ -96,7 +96,7 @@ export async function signup(formData: FormData) {
 
             if (existingProfile) {
                 // Update existing profile
-                const { error: profileError } = await supabase
+                const { error: _profileError } = await supabase
                     .from('profiles')
                     .update({
                         full_name: `${firstName} ${lastName}`,
@@ -106,7 +106,7 @@ export async function signup(formData: FormData) {
                     .eq('id', data.user.id);
             } else {
                 // Insert new profile
-                const { error: profileError } = await supabase
+                const { error: _profileError } = await supabase
                     .from('profiles')
                     .insert({
                         id: data.user.id,
