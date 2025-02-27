@@ -4,8 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { CreateStripeAccountLink } from "../actions";
-
-
+import ConnectStripe from "@/components/pageComponents/billing/ConnectStripe";
 async function getData(userId: string) {
     const supabase = createClient()
     const { data: profile } = await (await supabase)
@@ -30,7 +29,6 @@ export default async function Billing() {
     }
 
     const profile = await getData(user.id)
-
     return (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <Card>
@@ -43,7 +41,7 @@ export default async function Billing() {
                         <p>Connected to Stripe</p>
                     ) : (
                         <form action={CreateStripeAccountLink}>
-                            <Button type="submit">Connect to Stripe</Button>
+                            <ConnectStripe />
                         </form>
                     )}
                 </CardContent>
