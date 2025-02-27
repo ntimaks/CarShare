@@ -50,7 +50,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: st
         console.log('- Min Rental Duration:', values.minRentalDuration, 'days');
         console.log('- Max Rental Duration:', values.maxRentalDuration, 'days');
 
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('cars')
             .insert([
                 {
@@ -90,7 +90,7 @@ export async function onSubmit(values: z.infer<typeof formSchema>, imageKeys: st
             toast.error("Failed to submit listing. Please try again.");
         } else {
             toast.success("Listing submitted successfully!");
-            redirect("/");
+            redirect(`/cars/${data[0].id}`);
         }
     } catch (error) {
         await deleteUploadedFiles(imageKeys);

@@ -1,7 +1,6 @@
 import CarListingForm from "@/components/pageComponents/createListing/CarForm";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { toast } from "react-hot-toast";
 
 async function getData(userId: string) {
     const supabase = createClient()
@@ -12,7 +11,6 @@ async function getData(userId: string) {
         .single()
 
     if (!profile?.stripe_connected_linked) {
-        toast.error("You must connect your Stripe account to create a listing");
         redirect("/billing");
     }
 
@@ -24,7 +22,6 @@ export default async function CreateListing() {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        toast.error("You must be logged in to create a listing");
         redirect("/login");
     }
 
