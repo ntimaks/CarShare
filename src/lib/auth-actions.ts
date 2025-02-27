@@ -51,20 +51,26 @@ export async function signup(formData: FormData) {
 
         // Create Stripe Connect account
         console.log('Creating Stripe account...');
-        const account = await stripe.accounts.create({
-            type: 'express',
-            email,
-            capabilities: {
-                card_payments: { requested: true },
-                transfers: { requested: true }
-            },
-            business_type: 'individual',
-            individual: {
-                first_name: firstName,
-                last_name: lastName,
-            }
-        });
-        console.log('Stripe account created:', account.id);
+        let account;
+        try {
+            account = await stripe.accounts.create({
+                type: 'express',
+                email,
+                capabilities: {
+                    card_payments: { requested: true },
+                    transfers: { requested: true }
+                },
+                business_type: 'individual',
+                individual: {
+                    first_name: firstName,
+                    last_name: lastName,
+                }
+            });
+            console.log('Stripe account created:', account.id);
+        } catch (stripeError) {
+            console.error('Error creating Stripe account:', stripeError);
+            return redirect("/error");
+        }
 
         // Create Supabase user
         console.log('Creating Supabase user...');
@@ -81,22 +87,36 @@ export async function signup(formData: FormData) {
         });
 
         if (!supabaseError && data.user) {
-            // Insert the profile with connected_account_id
-            const { error: profileError } = await supabase
+            // First check if profile exists
+            const { data: existingProfile } = await supabase
                 .from('profiles')
-                .insert({
-                    id: data.user.id,
-                    full_name: `${firstName} ${lastName}`,
-                    email: email,
-                    connected_account_id: account.id
-                });
+                .select()
+                .eq('id', data.user.id)
+                .single();
 
-            if (profileError) {
-                console.error('Error creating profile:', profileError);
-                console.log('Cleaning up Stripe account...');
-                await stripe.accounts.del(account.id);
-                return redirect("/error");
+            if (existingProfile) {
+                // Update existing profile
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .update({
+                        full_name: `${firstName} ${lastName}`,
+                        email: email,
+                        connected_account_id: account.id
+                    })
+                    .eq('id', data.user.id);
+            } else {
+                // Insert new profile
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: data.user.id,
+                        full_name: `${firstName} ${lastName}`,
+                        email: email,
+                        connected_account_id: account.id
+                    });
             }
+
+
         }
 
         console.log('Supabase signup successful:', data);
