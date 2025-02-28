@@ -4,7 +4,8 @@ import { Button } from "../../ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../ui/card";
 import Image from "next/image"; 
 import { Skeleton } from "../../ui/skeleton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 interface Car {
     id: number
     make: string
@@ -22,7 +23,7 @@ interface CarListingProps {
 }
 
 export default function CarListing({ car }: CarListingProps) {
-    const [imageLoading, _setImageLoading] = useState(true);
+    const [imageLoading, setImageLoading] = useState(true);
 
     return (
         <Card key={car.id} className="overflow-hidden">
@@ -38,7 +39,8 @@ export default function CarListing({ car }: CarListingProps) {
                         alt={`${car.make} ${car.model}`}
                         layout="fill"
                         objectFit="cover"
-               />
+                        onLoad={() => setImageLoading(false)}
+                    />
                 </div>
             </CardHeader>
             <CardContent className="p-4">
@@ -46,9 +48,9 @@ export default function CarListing({ car }: CarListingProps) {
                     {car.year} {car.make} {car.model}
                 </CardTitle>
                 <div className="flex flex-wrap gap-2 mb-2">
-                    <Badge>{car.vehicle_type}</Badge>
-                    <Badge>{car.transmission}</Badge>
-                    <Badge>{car.fuel_type}</Badge>
+                    <Badge variant="outline">{car.vehicle_type}</Badge>
+                    <Badge variant="outline">{car.transmission}</Badge>
+                    <Badge variant="outline">{car.fuel_type}</Badge>
                 </div>
                 <p className="text-muted-foreground">${car.price_per_day} per day</p>
             </CardContent>
