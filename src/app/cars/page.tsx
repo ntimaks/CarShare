@@ -7,6 +7,8 @@ import { CarFilters } from "@/components/pageComponents/cars/CarFilters"
 import type { DateRange } from "react-day-picker"
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function CarsPage() {
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
@@ -76,7 +78,27 @@ export default function CarsPage() {
                 <CarFilters onFilterChange={handleFilterChange} resetTrigger={resetTrigger} />
             </div>
             {isLoading ? (
-                <div className="text-center">Loading cars...</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <Card key={index} className="overflow-hidden">
+                            <CardHeader className="p-0">
+                                <Skeleton className="h-48 w-full" />
+                            </CardHeader>
+                            <CardContent className="p-4">
+                                <Skeleton className="h-7 w-3/4 mb-2" />
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                    <Skeleton className="h-5 w-20" />
+                                    <Skeleton className="h-5 w-20" />
+                                    <Skeleton className="h-5 w-20" />
+                                </div>
+                                <Skeleton className="h-5 w-24" />
+                            </CardContent>
+                            <CardFooter className="p-4">
+                                <Skeleton className="h-9 w-full" />
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </div>
             ) : filteredCars.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredCars.map((car) => (
