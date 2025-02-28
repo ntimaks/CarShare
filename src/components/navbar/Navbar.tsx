@@ -75,6 +75,9 @@ export function Navbar() {
                         }} className="text-sm hover:text-primary transition-colors">
                             How It Works
                         </Link>
+                        <Link href="/cars" className="text-sm hover:text-primary transition-colors">
+                            Cars
+                        </Link>
 
                     </nav>
                     <div className="flex items-center space-x-4">
@@ -153,8 +156,9 @@ function MobileMenu() {
                     <Link href="#">How It Works</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <Link href="/createListing">List Your Car</Link>
+                    <Link href="/cars">Cars</Link>
                 </DropdownMenuItem>
+                
             </DropdownMenuContent>
         </DropdownMenu>
     )
