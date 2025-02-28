@@ -9,6 +9,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { type CarouselApi } from "@/components/ui/carousel"
 import BookingForm from "@/components/pageComponents/carListing/BookingForm"
 import type { DateRange } from "react-day-picker"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Card } from "@/components/ui/card"
 
 interface Car {
     id: number
@@ -46,8 +48,6 @@ export default function CarDetails() {
     const [_api, _setApi] = useState<CarouselApi>()
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
 
-
-
     useEffect(() => {
         if (id) {
             const fetchCar = async () => {
@@ -59,7 +59,6 @@ export default function CarDetails() {
                 } else {
                     setCar(data)
                     console.log('Car data:', data)
-
                 }
             }
 
@@ -73,7 +72,83 @@ export default function CarDetails() {
     }
 
     if (!car) {
-        return <div>Loading...</div>
+        return (
+            <div className="container mx-auto px-4 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Main Content Loading State */}
+                    <div className="lg:col-span-2 space-y-8 w-full">
+                        {/* Carousel Loading State */}
+                        <div className="grid grid-cols-1 gap-2">
+                            <Skeleton className="h-96 w-full rounded-lg" />
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                                {Array.from({ length: 4 }).map((_, index) => (
+                                    <Skeleton key={index} className="h-24 w-full rounded-lg" />
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Car Details Loading State */}
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-start">
+                                <Skeleton className="h-10 w-2/3" />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {Array.from({ length: 6 }).map((_, index) => (
+                                    <div key={index}>
+                                        <Skeleton className="h-5 w-32 mb-2" />
+                                        <Skeleton className="h-8 w-24" />
+                                    </div>
+                                ))}
+                            </div>
+
+                            <Skeleton className="h-6 w-40 mt-6" />
+                            <Skeleton className="h-24 w-full" />
+
+                            <Skeleton className="h-6 w-32 mt-6" />
+                            <div className="flex flex-wrap gap-2">
+                                {Array.from({ length: 4 }).map((_, index) => (
+                                    <Skeleton key={index} className="h-8 w-24" />
+                                ))}
+                            </div>
+
+                            <Skeleton className="h-6 w-48 mt-6" />
+                            <div className="flex flex-wrap gap-2">
+                                {Array.from({ length: 3 }).map((_, index) => (
+                                    <Skeleton key={index} className="h-8 w-32" />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Booking Form Loading State */}
+                    <div className="lg:col-span-1">
+                        <div className="sticky top-8">
+                            <Card className="p-6 space-y-4">
+                                <Skeleton className="h-8 w-full" />
+                                <Skeleton className="h-10 w-full" />
+                                <Skeleton className="h-10 w-full" />
+                                <Skeleton className="h-24 w-full" />
+                                <Skeleton className="h-10 w-full" />
+                            </Card>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Pricing and Rental Terms Loading State */}
+                <div className="mt-8">
+                    <Skeleton className="h-8 w-64 mb-4" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {Array.from({ length: 10 }).map((_, index) => (
+                            <div key={index}>
+                                <Skeleton className="h-5 w-32 mb-2" />
+                                <Skeleton className="h-6 w-24" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
