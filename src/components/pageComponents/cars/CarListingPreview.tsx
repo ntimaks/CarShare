@@ -4,7 +4,7 @@ import { Button } from "../../ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../ui/card";
 import Image from "next/image"; 
 import { Skeleton } from "../../ui/skeleton";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface Car {
     id: number
