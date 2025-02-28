@@ -30,18 +30,21 @@ export async function BuyProduct(formData: FormData) {
         error: null
     } : { data: null, error: carError };
 
-
     if (error) {
         console.error('Error fetching product:', error);
         return redirect('/error');
     }
+
+    // Convert price to cents and ensure it's an integer
+    const priceInCents = Math.round(totalPrice * 100);
+    const applicationFeeAmount = Math.round(priceInCents * 0.1); // 10% fee
 
     const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: [{
             price_data: {
                 currency: 'eur',
-                unit_amount: Math.round(totalPrice * 100),
+                unit_amount: priceInCents,
                 product_data: {
                     name: `${data.make} ${data.model}`,
                     images: data.photos ? [data.photos[0]] : [],
@@ -50,7 +53,7 @@ export async function BuyProduct(formData: FormData) {
             quantity: 1,
         }],
         payment_intent_data: {
-            application_fee_amount: Math.round(totalPrice * 100) * 0.1,
+            application_fee_amount: applicationFeeAmount,
             transfer_data: {
                 destination: data.profiles?.connected_account_id,
             },
