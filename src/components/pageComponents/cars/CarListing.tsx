@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
-import Image from "next/image";
-
+import { Badge } from "../../ui/badge";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../ui/card";
+import Image from "next/image"; 
+import { Skeleton } from "../../ui/skeleton";
+import { useState } from "react";
 interface Car {
     id: number
     make: string
@@ -21,10 +22,17 @@ interface CarListingProps {
 }
 
 export default function CarListing({ car }: CarListingProps) {
+    const [imageLoading, setImageLoading] = useState(true);
+
     return (
         <Card key={car.id} className="overflow-hidden">
             <CardHeader className="p-0">
                 <div className="relative h-48 w-full">
+                    {imageLoading && (
+                        <div className="absolute inset-0 z-10">
+                            <Skeleton className="h-full w-full" />
+                        </div>
+                    )}
                     <Image
                         src={car.photos ? car.photos[0] : '/placeholder-car.jpg'}
                         alt={`${car.make} ${car.model}`}

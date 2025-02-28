@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import CarListing from "../CarListing"
+import CarListing from "../cars/CarListing"
 import {
     Pagination,
     PaginationContent,
@@ -54,31 +54,31 @@ export default function PaginatedCarListings({ cars }: PaginatedCarListingsProps
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
-                        {currentPage !== 1 && <PaginationPrevious onClick={handlePreviousClick} size={undefined} />}
+                        {currentPage !== 1 && <PaginationPrevious onClick={handlePreviousClick}  />}
                     </PaginationItem>
                     {currentPage !== 1 && <PaginationEllipsis />}
                     {currentPage > 1 && (
                         <PaginationItem>
-                            <PaginationLink onClick={() => setCurrentPage(currentPage - 1)} isActive={false} size={undefined}>
+                            <PaginationLink onClick={() => setCurrentPage(currentPage - 1)} isActive={false} >
                                 {currentPage - 1}
                             </PaginationLink>
                         </PaginationItem>
                     )}
                     <PaginationItem>
-                        <PaginationLink onClick={() => setCurrentPage(currentPage)} isActive={true} size={undefined}>
+                        <PaginationLink onClick={() => setCurrentPage(currentPage)} isActive={true} >
                             {currentPage}
                         </PaginationLink>
                     </PaginationItem>
                     {currentPage < totalPages && (
                         <PaginationItem>
-                            <PaginationLink onClick={() => setCurrentPage(currentPage + 1)} isActive={false} size={undefined}>
+                            <PaginationLink onClick={() => setCurrentPage(currentPage + 1)} isActive={false} >
                                 {currentPage + 1}
                             </PaginationLink>
                         </PaginationItem>
                     )}
                     {currentPage !== totalPages && <PaginationEllipsis />}
                     <PaginationItem>
-                        {currentPage !== totalPages && <PaginationNext onClick={handleNextClick} size={undefined} />}
+                        {currentPage !== totalPages && <PaginationNext onClick={handleNextClick}  />}
                     </PaginationItem>
                 </PaginationContent>
             </Pagination>

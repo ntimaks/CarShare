@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { createClient } from "@/utils/supabase/client"
-import CarListing from "@/components/pageComponents/CarListing"
+import CarListing from "@/components/pageComponents/cars/CarListing"
 import { CarFilters } from "@/components/pageComponents/cars/CarFilters"
 import type { DateRange } from "react-day-picker"
 import DatePickerWithRange from "@/components/pageComponents/Date-Range-Picker"
