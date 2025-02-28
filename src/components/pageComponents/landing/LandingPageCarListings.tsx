@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import CarListing from "../cars/CarListing"
+import CarListing from "../cars/CarListingPreview"
 import {
     Pagination,
     PaginationContent,

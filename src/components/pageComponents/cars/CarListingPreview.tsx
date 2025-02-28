@@ -22,7 +22,7 @@ interface CarListingProps {
 }
 
 export default function CarListing({ car }: CarListingProps) {
-    const [imageLoading, setImageLoading] = useState(true);
+    const [imageLoading, _setImageLoading] = useState(true);
 
     return (
         <Card key={car.id} className="overflow-hidden">
