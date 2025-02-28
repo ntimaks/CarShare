@@ -54,31 +54,31 @@ export default function PaginatedCarListings({ cars }: PaginatedCarListingsProps
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
-                        {currentPage !== 1 && <PaginationPrevious onClick={handlePreviousClick} />}
+                        {currentPage !== 1 && <PaginationPrevious onClick={handlePreviousClick} size={undefined} />}
                     </PaginationItem>
                     {currentPage !== 1 && <PaginationEllipsis />}
                     {currentPage > 1 && (
                         <PaginationItem>
-                            <PaginationLink onClick={() => setCurrentPage(currentPage - 1)} isActive={false}>
+                            <PaginationLink onClick={() => setCurrentPage(currentPage - 1)} isActive={false} size={undefined}>
                                 {currentPage - 1}
                             </PaginationLink>
                         </PaginationItem>
                     )}
                     <PaginationItem>
-                        <PaginationLink onClick={() => setCurrentPage(currentPage)} isActive={true}>
+                        <PaginationLink onClick={() => setCurrentPage(currentPage)} isActive={true} size={undefined}>
                             {currentPage}
                         </PaginationLink>
                     </PaginationItem>
                     {currentPage < totalPages && (
                         <PaginationItem>
-                            <PaginationLink onClick={() => setCurrentPage(currentPage + 1)} isActive={false}>
+                            <PaginationLink onClick={() => setCurrentPage(currentPage + 1)} isActive={false} size={undefined}>
                                 {currentPage + 1}
                             </PaginationLink>
                         </PaginationItem>
                     )}
                     {currentPage !== totalPages && <PaginationEllipsis />}
                     <PaginationItem>
-                        {currentPage !== totalPages && <PaginationNext onClick={handleNextClick} />}
+                        {currentPage !== totalPages && <PaginationNext onClick={handleNextClick} size={undefined} />}
                     </PaginationItem>
                 </PaginationContent>
             </Pagination>

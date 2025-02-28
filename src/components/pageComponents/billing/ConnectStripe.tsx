@@ -9,11 +9,11 @@ export default function ConnectStripe() {
     return (
         <>
             {pending ? (
-                <Button disabled className="w-full" size="lg">
+                <Button disabled className="w-full" >
                     Processing...
                 </Button>
             ) : (
-                <Button type="submit" className="w-full" size="lg">
+                <Button type="submit" className="w-full">
                     Connect to Stripe
                 </Button>
             )}

@@ -30,7 +30,7 @@ export default function CarListing({ car }: CarListingProps) {
                         alt={`${car.make} ${car.model}`}
                         layout="fill"
                         objectFit="cover"
-                    />
+               />
                 </div>
             </CardHeader>
             <CardContent className="p-4">
@@ -38,9 +38,9 @@ export default function CarListing({ car }: CarListingProps) {
                     {car.year} {car.make} {car.model}
                 </CardTitle>
                 <div className="flex flex-wrap gap-2 mb-2">
-                    <Badge variant="secondary">{car.vehicle_type}</Badge>
-                    <Badge variant="secondary">{car.transmission}</Badge>
-                    <Badge variant="secondary">{car.fuel_type}</Badge>
+                    <Badge>{car.vehicle_type}</Badge>
+                    <Badge>{car.transmission}</Badge>
+                    <Badge>{car.fuel_type}</Badge>
                 </div>
                 <p className="text-muted-foreground">${car.price_per_day} per day</p>
             </CardContent>
