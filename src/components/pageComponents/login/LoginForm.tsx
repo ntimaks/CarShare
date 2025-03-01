@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
+import SignInWithGoogleButton from "./GoogleSignIn"
 
 export function LoginForm({
   className,
@@ -83,6 +84,19 @@ export function LoginForm({
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Logging in..." : "Login"}
               </Button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+
+              <SignInWithGoogleButton />
             </div>
           </form>
           <div className="mt-4 text-center text-sm">
