@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signup } from "@/lib/auth-actions";
 import SignUpButton from "./SignUpButton";
+import SignUpWithGoogleButton from "./GoogleSignUp";
+
 export function SignUpForm() {
     return (
         <Card className="mx-auto max-w-sm">
@@ -65,6 +67,19 @@ export function SignUpForm() {
                         </div>
 
                         <SignUpButton />
+
+                        <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t" />
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-background px-2 text-muted-foreground">
+                                    Or continue with
+                                </span>
+                            </div>
+                        </div>
+
+                        <SignUpWithGoogleButton />
                     </div>
                 </form>
                 <div className="mt-4 text-center text-sm">
