@@ -156,6 +156,7 @@ export async function signInWithGoogle() {
                 access_type: "offline",
                 prompt: "consent",
             },
+            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/google-callback`,
         },
     });
 
@@ -164,5 +165,72 @@ export async function signInWithGoogle() {
         redirect("/error");
     } else {
         redirect(data.url);
+    }
+}
+
+export async function handleGoogleCallback() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        console.error('No user found after Google authentication');
+        return redirect("/error");
+    }
+
+    try {
+        // Check if user already has a Stripe account
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('connected_account_id')
+            .eq('id', user.id)
+            .single();
+
+        // Only create Stripe account if user doesn't have one already
+        if (!profile?.connected_account_id) {
+            const firstName = user.user_metadata.full_name?.split(' ')[0] || '';
+            const lastName = user.user_metadata.full_name?.split(' ').slice(1).join(' ') || '';
+            const email = user.email;
+
+            console.log('Creating Stripe account for Google user...');
+
+            // Create Stripe Connect account
+            const account = await stripe.accounts.create({
+                type: 'express',
+                email,
+                capabilities: {
+                    card_payments: { requested: true },
+                    transfers: { requested: true }
+                },
+                business_type: 'individual',
+                individual: {
+                    first_name: firstName,
+                    last_name: lastName,
+                }
+            });
+
+            console.log('Stripe account created:', account.id);
+
+            // Update user profile with Stripe account ID
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .upsert({
+                    id: user.id,
+                    full_name: user.user_metadata.full_name,
+                    email: email,
+                    connected_account_id: account.id
+                });
+
+            if (profileError) {
+                console.error('Error updating profile with Stripe account:', profileError);
+                return redirect("/error");
+            }
+        }
+
+        revalidatePath("/", "layout");
+        return redirect("/");
+
+    } catch (error: any) {
+        console.error("Google auth callback error:", error);
+        return redirect("/error");
     }
 }
