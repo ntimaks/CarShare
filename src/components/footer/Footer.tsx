@@ -53,7 +53,7 @@ const Footer = ({
         {
             title: "Company",
             links: [
-                { text: "About Us", url: "#about" },
+                { text: "About Us", url: "/aboutUs" },
                 { text: "Blog", url: "#blog" },
                 { text: "Careers", url: "#careers" },
                 { text: "Contact", url: "#contact" },
